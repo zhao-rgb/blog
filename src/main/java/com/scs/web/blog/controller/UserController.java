@@ -5,10 +5,10 @@ import com.google.gson.GsonBuilder;
 import com.scs.web.blog.domain.UserDto;
 import com.scs.web.blog.factory.ServiceFactory;
 import com.scs.web.blog.service.UserService;
+import com.scs.web.blog.util.Message;
 import com.scs.web.blog.util.ResponseObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -45,17 +45,17 @@ public class UserController extends HttpServlet {
         Map<String, Object> map = userService.signIn(userDto);
         String msg = (String) map.get("msg");
         ResponseObject ro;
-        switch (msg) {
-            case "登录成功":
-                ro = ResponseObject.success(200, msg, map.get("data"));
-                break;
-            case "密码错误":
-            case "手机号不存在":
-            default:
-                ro = ResponseObject.success(200, msg);
+        if (msg.equals(Message.SIGN_IN_SUCCESS)) {
+            ro = ResponseObject.success(200, msg, map.get("data"));
+        } else {
+            ro = ResponseObject.success(200, msg);
         }
         PrintWriter out = resp.getWriter();
         out.print(gson.toJson(ro));
         out.close();
+    }
+    @Override
+    public void init() throws ServletException {
+        logger.info("UserController初始化");
     }
 }
