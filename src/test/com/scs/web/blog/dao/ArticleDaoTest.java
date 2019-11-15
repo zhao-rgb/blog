@@ -22,6 +22,8 @@ public class ArticleDaoTest {
         } catch (SQLException e) {
             logger.error("异常");
 
+
+
         }
     }
 }

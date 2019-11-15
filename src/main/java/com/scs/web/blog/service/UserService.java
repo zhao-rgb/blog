@@ -1,7 +1,7 @@
 package com.scs.web.blog.service;
 
 
-import com.scs.web.blog.domain.UserDto;
+import com.scs.web.blog.domain.dto.UserDto;
 
 import java.util.Map;
 

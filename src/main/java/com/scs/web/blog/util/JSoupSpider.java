@@ -126,7 +126,7 @@ public class JSoupSpider {
                 article.setContent(content);
                 article.setCover(cover);
                 article.setDiamond(new Random().nextInt(100));
-                article.setNickname(nickName);
+
                 article.setComments(Integer.valueOf(comments));
                 article.setLikes(Integer.valueOf(likes));
                 article.setPublishTime(Timestamp.valueOf(publishTime).toLocalDateTime());
