@@ -1,10 +1,13 @@
 package com.scs.web.blog.dao.impl;
 
 import com.scs.web.blog.dao.UserDao;
+import com.scs.web.blog.domain.dto.UserDto;
 import com.scs.web.blog.entity.User;
 import com.scs.web.blog.util.DbUtil;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,8 +50,17 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public int insert(User user) throws SQLException {
-        return 0;
+    public int insert(UserDto userDto) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql = "INSERT INTO t_user(mobile, password, nickname, create_time) VALUES(?, ?, ?, ?) ";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setString(1, userDto.getMobile());
+        pstmt.setString(2, DigestUtils.md5Hex(userDto.getPassword()));
+        pstmt.setString(3, userDto.getNickname());
+        pstmt.setObject(4, Timestamp.valueOf(LocalDateTime.now()));
+        int i = pstmt.executeUpdate();
+        System.out.println("执行为插入方法后受影响的行数为：" + i);
+        return i;
     }
 
     @Override

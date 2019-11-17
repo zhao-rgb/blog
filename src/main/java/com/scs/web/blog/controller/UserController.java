@@ -26,7 +26,7 @@ import java.util.Map;
  * @Date 2019/11/9
  * @Version 1.0
  **/
-@WebServlet(urlPatterns = {"/api/sign-in","/api/users"})
+@WebServlet(urlPatterns = {"/api/sign-in","/api/register"})
 public class UserController extends HttpServlet {
     private static Logger logger = LoggerFactory.getLogger(UserController.class);
     private UserService userService = ServiceFactory.getUserServiceInstance();
@@ -42,14 +42,47 @@ public class UserController extends HttpServlet {
         logger.info("登录用户信息：" + stringBuilder.toString());
         Gson gson = new GsonBuilder().create();
         UserDto userDto = gson.fromJson(stringBuilder.toString(), UserDto.class);
-        Map<String, Object> map = userService.signIn(userDto);
+//        Map<String, Object> map = userService.signIn(userDto);
+//        String msg = (String) map.get("msg");
+//        ResponseObject ro;
+//        if (msg.equals(Message.SIGN_IN_SUCCESS)) {
+//            ro = ResponseObject.success(200, msg, map.get("data"));
+//        } else {
+//            ro = ResponseObject.success(200, msg);
+//        }
+
+
+        Map<String, Object> map = null;
+        // 获取请求路径
+        String requestPath = req.getRequestURI().trim();
+        System.out.println(requestPath);
+        switch (requestPath) {
+            case "/api/sign-in":
+                System.out.println("进入登录");
+                map = userService.signIn(userDto);
+                break;
+            case "/api/register":
+                System.out.println("进入注册");
+                map = userService.register(userDto);
+                break;
+        }
         String msg = (String) map.get("msg");
         ResponseObject ro;
-        if (msg.equals(Message.SIGN_IN_SUCCESS)) {
-            ro = ResponseObject.success(200, msg, map.get("data"));
-        } else {
-            ro = ResponseObject.success(200, msg);
+        switch (msg) {
+            case Message.SIGN_IN_SUCCESS:
+            case Message.REGISTER_SUCCESS:
+                ro = ResponseObject.success(200, msg, map.get("data"));
+                break;
+            case Message.PASSWORD_ERROR:
+            case Message.MOBILE_NOT_FOUND:
+            case Message.REGISTER_DEFEATED:
+            default:
+                ro = ResponseObject.success(200, msg);
         }
+
+
+
+
         PrintWriter out = resp.getWriter();
         out.print(gson.toJson(ro));
         out.close();

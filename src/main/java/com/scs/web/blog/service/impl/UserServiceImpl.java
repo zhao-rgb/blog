@@ -5,6 +5,7 @@ import com.scs.web.blog.domain.dto.UserDto;
 import com.scs.web.blog.entity.User;
 import com.scs.web.blog.factory.DaoFactory;
 import com.scs.web.blog.service.UserService;
+import com.scs.web.blog.util.Message;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,4 +45,27 @@ public class UserServiceImpl implements UserService {
         }
         return map;
     }
+
+    @Override
+    public Map<String, Object> register(UserDto userDto) {
+        Map<String, Object> map = new HashMap<>();
+        int i = 0;
+        try {
+            i = userDao.insert(userDto);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            logger.error("用户注册时出错！");
+        }
+        System.out.println("i的值为：" + i);
+        if (i == 1) {
+            map.put("msg", Message.REGISTER_SUCCESS);
+            map.put("data", userDto);
+            logger.info("注册" + userDto.getMobile() + "用户成功");
+        } else {
+            map.put("msg", Message.REGISTER_DEFEATED);
+        }
+        return map;
+    }
+
+
 }

@@ -19,4 +19,11 @@ public interface UserService {
      * @return
      */
     Map<String,Object> signIn(UserDto userDto);
+
+    /**
+     * 注册新用户
+     * @param userDto
+     * @return
+     */
+    Map<String,Object> register(UserDto userDto);
 }

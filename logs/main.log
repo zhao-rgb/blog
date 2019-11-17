@@ -1,2 +1,1 @@
-2019-11-16.14:07:24 INFO  [main] com.scs.web.blog.dao.UserDaoTest.batchInsert:20  成功新增72个用户
-2019-11-16.14:47:42 INFO  [main] com.scs.web.blog.dao.UserDaoTest.batchInsert:20  成功新增72个用户
+2019-11-17.16:16:10 INFO  [main] com.scs.web.blog.dao.UserDaoTest.insert:36  成功新增一名用户！

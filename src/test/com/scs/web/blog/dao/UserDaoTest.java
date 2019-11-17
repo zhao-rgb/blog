@@ -1,5 +1,6 @@
 package com.scs.web.blog.dao;
 
+import com.scs.web.blog.domain.dto.UserDto;
 import com.scs.web.blog.entity.User;
 import com.scs.web.blog.factory.DaoFactory;
 import com.scs.web.blog.util.JSoupSpider;
@@ -23,4 +24,20 @@ public class UserDaoTest {
             logger.error("批量新增用户出现异常");
         }
     }
+    @Test
+    public void insert(){
+        try {
+            UserDto userDto = new UserDto();
+            userDto.setMobile("13457513856");
+            userDto.setPassword("666666");
+            userDto.setNickname("苏玉溪");
+            int result = userDao.insert(userDto);
+            if (result == 1) {
+                logger.info("成功新增一名用户！");
+            }
+        } catch (SQLException e) {
+            logger.error("新增一名用户失败！");
+        }
+    }
 }
+
