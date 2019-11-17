@@ -26,7 +26,7 @@ import java.util.Map;
  * @Date 2019/11/9
  * @Version 1.0
  **/
-@WebServlet(urlPatterns = "/sign-in")
+@WebServlet(urlPatterns = {"/api/sign-in","/api/users"})
 public class UserController extends HttpServlet {
     private static Logger logger = LoggerFactory.getLogger(UserController.class);
     private UserService userService = ServiceFactory.getUserServiceInstance();

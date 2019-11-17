@@ -1,5 +1,6 @@
 package com.scs.web.blog.dao;
 
+import com.scs.web.blog.domain.vo.ArticleVo;
 import com.scs.web.blog.entity.Article;
 
 import java.sql.SQLException;
@@ -20,4 +21,6 @@ public interface ArticleDao {
      * @throws SQLException
      */
   int [] batchInsert(List<Article> articleList)throws SQLException;
+
+    List<ArticleVo> selectHotArticles() throws SQLException;
 }

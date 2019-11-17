@@ -65,7 +65,7 @@ public class DataUtil {
     public static String getAddress() {
         StringBuilder address = new StringBuilder();
         ClassLoader classLoader = DataUtil.class.getClassLoader();
-        URL resource = classLoader.getResource("address.json");
+        URL resource = classLoader.getResource("https://raw.githubusercontent.com/mqxu/blog/master/src/main/resources/address.json");
         assert resource != null;
         String path = resource.getPath();
         File file = new File(path);
