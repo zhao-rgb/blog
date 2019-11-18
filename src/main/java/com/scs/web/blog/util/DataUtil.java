@@ -11,6 +11,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.io.*;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 
@@ -102,6 +103,23 @@ public class DataUtil {
     public static int getUserId(){
         Random random = new Random();
         int bound = random.nextInt(72)+1;
+        return bound;
+    }
+
+    /**
+     * 生成时间
+     * @return
+     */
+    public static LocalDateTime getCreateTime(){
+        LocalDateTime now = LocalDateTime.now();
+        Random random = new Random();
+        int bound = random.nextInt(999);
+        return now.minusHours(bound);
+    }
+
+    public static Long getUserrId(){
+        Random random = new Random();
+        long bound = random.nextInt(61);
         return bound;
     }
 
