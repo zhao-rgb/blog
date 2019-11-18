@@ -2,6 +2,7 @@ package com.scs.web.blog.service;
 
 
 import com.scs.web.blog.domain.dto.UserDto;
+import com.scs.web.blog.util.Result;
 
 import java.util.Map;
 
@@ -26,4 +27,10 @@ public interface UserService {
      * @return
      */
     Map<String,Object> register(UserDto userDto);
+
+    /**
+     * 获取热门用户信息
+     * @return
+     */
+    Result getHotUsers();
 }

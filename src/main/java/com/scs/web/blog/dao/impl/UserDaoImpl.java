@@ -121,12 +121,43 @@ public class UserDaoImpl implements UserDao {
         return user;
     }
 
-//    @Override
-//    public List<User> selectHotUsers() throws SQLException {
-//        Connection connection = DbUtil.getConnection();
-//        String sql = "SELECT * FROM t_user ORDER BY fans DESC LIMIT 10 ";
-//        PreparedStatement pst = connection.prepareStatement(sql);
-//        ResultSet rs = pst.executeQuery();
-//        return convert(rs);
-//    }
+    @Override
+    public List<User> selectHotUsers() throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql = "SELECT * FROM t_user ORDER BY fans DESC LIMIT 10 ";
+        PreparedStatement pst = connection.prepareStatement(sql);
+        ResultSet rs = pst.executeQuery();
+        return convert(rs);
+    }
+
+
+    private List<User> convert(ResultSet rs) {
+        List<User> userList = new ArrayList<>(50);
+        try {
+            while (rs.next()) {
+                User user = new User();
+                user.setId(rs.getLong("id"));
+                user.setMobile(rs.getString("mobile"));
+                user.setPassword(rs.getString("password"));
+                user.setNickname(rs.getString("nickname"));
+                user.setAvatar(rs.getString("avatar"));
+                user.setGender(rs.getString("gender"));
+                user.setBirthday(rs.getDate("birthday").toLocalDate());
+                user.setIntroduction(rs.getString("introduction"));
+//                user.setBanner(rs.getString("banner"));
+//                user.setEmail(rs.getString("email"));
+                user.setAddress(rs.getString("address"));
+                user.setFollows(rs.getShort("follows"));
+                user.setFans(rs.getShort("fans"));
+                user.setArticles(rs.getShort("articles"));
+                user.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
+                user.setStatus(rs.getShort("status"));
+                userList.add(user);
+            }
+        } catch (SQLException e) {
+//            logger.error("查询用户数据产生异常");
+            e.printStackTrace();
+        }
+        return userList;
+    }
 }

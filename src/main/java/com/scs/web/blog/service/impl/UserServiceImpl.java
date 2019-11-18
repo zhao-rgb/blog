@@ -6,12 +6,15 @@ import com.scs.web.blog.entity.User;
 import com.scs.web.blog.factory.DaoFactory;
 import com.scs.web.blog.service.UserService;
 import com.scs.web.blog.util.Message;
+import com.scs.web.blog.util.Result;
+import com.scs.web.blog.util.ResultCode;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -65,6 +68,23 @@ public class UserServiceImpl implements UserService {
             map.put("msg", Message.REGISTER_DEFEATED);
         }
         return map;
+    }
+
+
+    @Override
+    public Result getHotUsers() {
+        List<User> userList = null;
+        try {
+            userList = userDao.selectHotUsers();
+        } catch (SQLException e) {
+            logger.error("获取热门用户出现异常");
+        }
+        if (userList != null) {
+            //成功并返回数据
+            return Result.success(userList);
+        }
+        //失败，不返回数据
+        return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
     }
 
 

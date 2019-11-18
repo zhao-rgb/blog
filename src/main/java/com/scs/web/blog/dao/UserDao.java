@@ -50,5 +50,5 @@ public interface UserDao {
      * @return
      * @throws SQLException
      */
-//    List<User> selectHotUsers() throws SQLException;
+    List<User> selectHotUsers() throws SQLException;
 }
