@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,43 +28,64 @@ import java.util.Map;
  * @Date 2019/11/9
  * @Version 1.0
  **/
-@WebServlet(urlPatterns = {"/api/sign-in","/api/register","/api/hot"})
+@WebServlet(urlPatterns = {"/api/sign-in","/api/register","/api/hot", "/api/detail/*"})
 public class UserController extends HttpServlet {
     private static Logger logger = LoggerFactory.getLogger(UserController.class);
     private UserService userService = ServiceFactory.getUserServiceInstance();
 
 
-    /**
-     * 根据请求地址，取得最后的内容，结合请求方法来决定分发到不同的方法
-     *
-     * @param uri
-     * @return
-     */
-    private String getPatten(String uri) {
-        int len = "/api".length();
-        return uri.substring(len);
-    }
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //去掉了地址共同的前缀，对不同的部分进行分发
-        String patten = getPatten(req.getRequestURI());
-        switch (patten) {
-            case "/hot":
+        String uri = req.getRequestURI().trim();
+        if ("/api".equals(uri)) {
+            String page = req.getParameter("page");
+            String keywords = req.getParameter("keywords");
+            String count = req.getParameter("count");
+            if (page != null) {
+                getUsersByPage(resp, Integer.parseInt(page), Integer.parseInt(count));
+            } else if (keywords != null) {
+                getUsersByKeywords(resp, keywords);
+            } else {
                 getHotUser(req, resp);
-                break;
-//            case "/list?page=*":
-//                getPageUser(req, resp);
-//                break;
-//            case "/*":
-//                getUser(req, resp);
-//                break;
+            }
+        } else {
+            getUser(req, resp);
         }
     }
 
     private void getHotUser(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Gson gson = new GsonBuilder().create();
         Result result = userService.getHotUsers();
+        PrintWriter out = resp.getWriter();
+        out.print(gson.toJson(result));
+        out.close();
+    }
+
+
+    private void getUsersByPage(HttpServletResponse resp, int page, int count) throws IOException {
+        Gson gson = new GsonBuilder().create();
+        Result result = userService.selectByPage(page, count);
+        PrintWriter out = resp.getWriter();
+        out.print(gson.toJson(result));
+        out.close();
+    }
+
+    private void getUsersByKeywords(HttpServletResponse resp, String keywords) throws IOException {
+        Gson gson = new GsonBuilder().create();
+        Result result = userService.selectByKeywords(keywords);
+        PrintWriter out = resp.getWriter();
+        out.print(gson.toJson(result));
+        out.close();
+    }
+
+
+    private void getUser(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String info = req.getPathInfo().trim();
+        //取得路径参数
+        String id = info.substring(info.indexOf("/") + 1);
+        Gson gson = new GsonBuilder().create();
+        Result result = (Result) userService.userById(Long.parseLong(id));
         PrintWriter out = resp.getWriter();
         out.print(gson.toJson(result));
         out.close();
@@ -80,15 +102,6 @@ public class UserController extends HttpServlet {
         logger.info("登录用户信息：" + stringBuilder.toString());
         Gson gson = new GsonBuilder().create();
         UserDto userDto = gson.fromJson(stringBuilder.toString(), UserDto.class);
-//        Map<String, Object> map = userService.signIn(userDto);
-//        String msg = (String) map.get("msg");
-//        ResponseObject ro;
-//        if (msg.equals(Message.SIGN_IN_SUCCESS)) {
-//            ro = ResponseObject.success(200, msg, map.get("data"));
-//        } else {
-//            ro = ResponseObject.success(200, msg);
-//        }
-
 
         Map<String, Object> map = null;
         // 获取请求路径

@@ -59,4 +59,30 @@ public class TopicController extends HttpServlet {
         out.close();
     }
 
+    private void getTopicsByPage(HttpServletResponse resp, int page, int count) throws ServletException, IOException {
+        Gson gson = new GsonBuilder().create();
+        Result result = topicService.selectByPage(page, count);
+        PrintWriter out = resp.getWriter();
+        out.print(gson.toJson(result));
+        out.close();
+    }
+
+    private void getTopicsByKeywords(HttpServletResponse resp, String keywords) throws ServletException, IOException {
+        Gson gson = new GsonBuilder().create();
+        Result result = topicService.selectByKeywords(keywords);
+        PrintWriter out = resp.getWriter();
+        out.print(gson.toJson(result));
+        out.close();
+    }
+
+//    private void getTopic(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//        String info = req.getPathInfo().trim();
+//        //取得路径参数
+//        String id = info.substring(info.indexOf("/") + 1);
+//        Gson gson = new GsonBuilder().create();
+//        Result result = topicService.getTopic(Long.parseLong(id));
+//        PrintWriter out = resp.getWriter();
+//        out.print(gson.toJson(result));
+//        out.close();
+//    }
 }

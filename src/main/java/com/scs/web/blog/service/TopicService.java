@@ -18,4 +18,37 @@ public interface TopicService {
      */
     Result getHotTopics();
 
+//    /**
+//     * 分页查询专题
+//     * @param currentPage
+//     * @param pageCount
+//     * @return
+//     */
+//    Result getPageTopics(int currentPage,int pageCount);
+
+
+//    /**
+//     * 根据id获取专题详情
+//     * @param id
+//     * @return
+//     */
+//    Result getTopic(long id);
+
+    /**
+     * 根据名称或描述模糊搜索专题
+     *
+     * @param keywords
+     * @return
+     */
+    Result selectByKeywords(String keywords);
+
+
+    /**
+     * 分页查询专题信息
+     * @param currentPage
+     * @param count
+     * @return
+     */
+    Result selectByPage(int currentPage,int count);
+
 }

@@ -50,7 +50,7 @@ public class ArticleDaoImpl implements ArticleDao {
         });
         int[] result = pstmt.executeBatch();
         connection.commit();
-        DbUtil.close(null, pstmt, connection);
+//        DbUtil.close(null, pstmt, connection);
         return result;
     }
 
@@ -83,6 +83,108 @@ public class ArticleDaoImpl implements ArticleDao {
         return articleVoList;
     }
 
+    @Override
+    public List<ArticleVo> selectByPage(int currentPage, int count) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql = "SELECT a.*,b.topic_name,b.logo,c.nickname,c.avatar " +
+                "FROM t_article a " +
+                "LEFT JOIN t_topic b " +
+                "ON a.topic_id = b.id " +
+                "LEFT JOIN t_user c " +
+                "ON a.user_id = c.id " +
+                "ORDER BY a.id  LIMIT ?,? ";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setInt(1, (currentPage - 1) * count);
+        pstmt.setInt(2, count);
+        ResultSet rs = pstmt.executeQuery();
+        List<ArticleVo> articleVos = convert(rs);
+        return articleVos;
+    }
+
+
+    @Override
+    public List<ArticleVo> selectByKeywords(String keywords) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        //从文章、专题、用户表联查出前端需要展示的数据
+        String sql = "SELECT a.*,b.topic_name,b.logo,c.nickname,c.avatar " +
+                "FROM t_article a " +
+                "LEFT JOIN t_topic b " +
+                "ON a.topic_id = b.id " +
+                "LEFT JOIN t_user c " +
+                "ON a.user_id = c.id " +
+                "WHERE a.title LIKE ?  OR a.summary LIKE ? ";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setString(1, "%" + keywords + "%");
+        pstmt.setString(2, "%" + keywords + "%");
+        ResultSet rs = pstmt.executeQuery();
+        List<ArticleVo> articleVos = convert(rs);
+//        DbUtil.close(null, pstmt, connection);
+        return articleVos;
+    }
+
+    @Override
+    public List<ArticleVo> selectByTopicId(long topicId) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        //从文章、专题、用户表联查出前端需要展示的数据
+        String sql = "SELECT a.*,b.topic_name,b.logo,c.nickname,c.avatar " +
+                "FROM t_article a " +
+                "LEFT JOIN t_topic b " +
+                "ON a.topic_id = b.id " +
+                "LEFT JOIN t_user c " +
+                "ON a.user_id = c.id " +
+                "WHERE a.topic_id = ? ";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setLong(1, topicId);
+        ResultSet rs = pstmt.executeQuery();
+        List<ArticleVo> articleVos = convert(rs);
+//        DbUtil.close(null, pstmt, connection);
+        return articleVos;
+    }
+
+    @Override
+    public ArticleVo getArticle(long id) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql = "SELECT a.*,b.topic_name,b.logo,c.nickname,c.avatar " +
+                "FROM t_article a " +
+                "LEFT JOIN t_topic b " +
+                "ON a.topic_id = b.id " +
+                "LEFT JOIN t_user c " +
+                "ON a.user_id = c.id " +
+                "WHERE a.id = ?  ";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setLong(1, id);
+        ResultSet rs = pstmt.executeQuery();
+        ArticleVo articleVo = convert(rs).get(0);
+        rs.previous();
+        articleVo.setContent(rs.getString("content"));
+        return articleVo;
+    }
+
+    private List<ArticleVo> convert(ResultSet rs) {
+        List<ArticleVo> articleVoList = new ArrayList<>();
+        try {
+            while (rs.next()) {
+                ArticleVo articleVo = new ArticleVo();
+                articleVo.setId(rs.getLong("id"));
+                articleVo.setUserId(rs.getLong("user_id"));
+//                articleVo.setTopicId(rs.getLong("topic_id"));
+                articleVo.setTitle(rs.getString("title"));
+//                articleVo.setThumbnail(rs.getString("thumbnail"));
+//                articleVo.setSummary(rs.getString("summary"));
+                articleVo.setLikes(rs.getInt("likes"));
+                articleVo.setComments(rs.getInt("comments"));
+//                articleVo.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
+                articleVo.setNickname(rs.getString("nickname"));
+                articleVo.setAvatar(rs.getString("avatar"));
+//                articleVo.setTopicName(rs.getString("topic_name"));
+//                articleVo.setLogo(rs.getString("logo"));
+                articleVoList.add(articleVo);
+            }
+        } catch (SQLException e) {
+            logger.error("文章数据结果集解析异常");
+        }
+        return articleVoList;
+    }
 
 }
 

@@ -3,6 +3,7 @@ package com.scs.web.blog.dao.impl;
 
 import com.scs.web.blog.dao.TopicDao;
 
+import com.scs.web.blog.domain.vo.TopicVo;
 import com.scs.web.blog.entity.Topic;
 import com.scs.web.blog.util.DbUtil;
 import org.slf4j.Logger;
@@ -47,7 +48,7 @@ public class TopicDaoImpl implements TopicDao {
         });
         int[] result = pstmt.executeBatch();
         connection.commit();
-        DbUtil.close(null, pstmt, connection);
+//        DbUtil.close(null, pstmt, connection);
         return result;
     }
 
@@ -57,7 +58,64 @@ public class TopicDaoImpl implements TopicDao {
         String sql = "SELECT * FROM t_topic ORDER BY follows DESC LIMIT 10 ";
         PreparedStatement pstmt = connection.prepareStatement(sql);
         ResultSet rs = pstmt.executeQuery();
-        return convert(rs);
+        List<Topic> topicList = convert(rs);
+//        DbUtil.close(null, pstmt, connection);
+        return topicList;
+    }
+
+    @Override
+    public List<Topic> selectByPage(int currentPage, int count) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql = "SELECT * FROM t_topic " +
+                "ORDER BY id  LIMIT ?,? ";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setInt(1, (currentPage - 1) * count);
+        pstmt.setInt(2, count);
+        ResultSet rs = pstmt.executeQuery();
+        List<Topic> topicList = convert(rs);
+//        DbUtil.close(null, pstmt, connection);
+        return topicList;
+    }
+
+
+    @Override
+    public TopicVo getTopic(long id) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql = "SELECT a.*,b.nickname,b.avatar " +
+                "FROM t_topic a " +
+                "LEFT JOIN t_user b " +
+                "ON a.admin_id = b.id " +
+                "WHERE a.id = ?  ";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setLong(1, id);
+        ResultSet rs = pstmt.executeQuery();
+        TopicVo topicVo = null;
+        if (rs.next()) {
+            topicVo = new TopicVo();
+            topicVo.setId(rs.getLong("id"));
+            topicVo.setAdminId(rs.getLong("admin_id"));
+            topicVo.setTopicName(rs.getString("topic_name"));
+            topicVo.setLogo(rs.getString("logo"));
+            topicVo.setDescription(rs.getString("description"));
+            topicVo.setArticles(rs.getInt("articles"));
+            topicVo.setFollows(rs.getInt("follows"));
+            topicVo.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
+        }
+        return topicVo;
+    }
+
+    @Override
+    public List<Topic> selectByKeywords(String keywords) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql = "SELECT * FROM t_topic " +
+                "WHERE topic_name LIKE ?  OR description LIKE ? ";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setString(1, "%" + keywords + "%");
+        pstmt.setString(2, "%" + keywords + "%");
+        ResultSet rs = pstmt.executeQuery();
+        List<Topic> topicList = convert(rs);
+//        DbUtil.close(null, pstmt, connection);
+        return topicList;
     }
 
     private List<Topic> convert(ResultSet rs) {

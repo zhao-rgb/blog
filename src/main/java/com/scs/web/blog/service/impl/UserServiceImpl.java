@@ -2,6 +2,8 @@ package com.scs.web.blog.service.impl;
 
 import com.scs.web.blog.dao.UserDao;
 import com.scs.web.blog.domain.dto.UserDto;
+import com.scs.web.blog.domain.vo.UserVo;
+import com.scs.web.blog.entity.Article;
 import com.scs.web.blog.entity.User;
 import com.scs.web.blog.factory.DaoFactory;
 import com.scs.web.blog.service.UserService;
@@ -13,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,7 +80,8 @@ public class UserServiceImpl implements UserService {
         try {
             userList = userDao.selectHotUsers();
         } catch (SQLException e) {
-            logger.error("获取热门用户出现异常");
+//            logger.error("获取热门用户出现异常");
+            e.printStackTrace();
         }
         if (userList != null) {
             //成功并返回数据
@@ -88,4 +92,54 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    @Override
+    public Result selectByPage(int currentPage, int count) {
+        List<User> userList = null;
+        try {
+            userList = userDao.selectByPage(currentPage, count);
+        } catch (
+                SQLException e) {
+            logger.error("分页查询用户出现异常");
+        }
+        if (userList != null) {
+            return Result.success(userList);
+        } else {
+            return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
+        }
+    }
+
+
+    @Override
+    public List<Object> userById(Long id) {
+        User user = null;
+        List<Article> articleList = new ArrayList<>();
+        List<Object> list = new ArrayList<>();
+        try {
+            user = userDao.getUserById(id);
+            articleList = userDao.getArticleById(id);
+            list.add(user);
+            list.add(articleList);
+            if (user != null && articleList.size() > 0) {
+                logger.info("成功获取id=" + id + "的文章信息");
+            }
+        } catch (SQLException e) {
+            logger.error("获取id=" + id + "的文章信息出错");
+        }
+        return list;
+    }
+
+    @Override
+    public Result selectByKeywords(String keywords) {
+        List<User> userList = null;
+        try {
+            userList = userDao.selectByKeywords(keywords);
+        } catch (SQLException e) {
+            logger.error("根据关键字查询用户出现异常");
+        }
+        if (userList != null) {
+            return Result.success(userList);
+        } else {
+            return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
+        }
+    }
 }

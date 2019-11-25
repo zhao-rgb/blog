@@ -4,6 +4,7 @@ package com.scs.web.blog.service;
 import com.scs.web.blog.domain.dto.UserDto;
 import com.scs.web.blog.util.Result;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,4 +34,25 @@ public interface UserService {
      * @return
      */
     Result getHotUsers();
+    /**
+     * 获取分页用户信息
+     * @return
+     */
+
+    Result selectByPage(int currentPage,int count);
+
+    /**
+     * 获取指定id的用户信息
+     * @param id 指定用户id
+     * @return 返回该用户信息 及 发表的文章信息
+     */
+    List<Object> userById(Long id);
+
+    /**
+     * 根据昵称或简介模糊搜索用户
+     *
+     * @param keywords
+     * @return
+     */
+    Result selectByKeywords(String keywords);
 }
