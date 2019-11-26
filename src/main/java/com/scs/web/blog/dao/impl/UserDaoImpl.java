@@ -5,6 +5,7 @@ import com.scs.web.blog.domain.dto.UserDto;
 import com.scs.web.blog.domain.vo.UserVo;
 import com.scs.web.blog.entity.Article;
 import com.scs.web.blog.entity.User;
+import com.scs.web.blog.util.BeanHandler;
 import com.scs.web.blog.util.DbUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;

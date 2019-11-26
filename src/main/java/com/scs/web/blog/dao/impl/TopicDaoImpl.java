@@ -59,7 +59,6 @@ public class TopicDaoImpl implements TopicDao {
         PreparedStatement pstmt = connection.prepareStatement(sql);
         ResultSet rs = pstmt.executeQuery();
         List<Topic> topicList = convert(rs);
-//        DbUtil.close(null, pstmt, connection);
         return topicList;
     }
 
@@ -73,7 +72,6 @@ public class TopicDaoImpl implements TopicDao {
         pstmt.setInt(2, count);
         ResultSet rs = pstmt.executeQuery();
         List<Topic> topicList = convert(rs);
-//        DbUtil.close(null, pstmt, connection);
         return topicList;
     }
 

@@ -2,6 +2,7 @@ package com.scs.web.blog.domain.vo;
 
 import com.scs.web.blog.domain.dto.SimpleUser;
 import com.scs.web.blog.entity.Article;
+import com.scs.web.blog.entity.Topic;
 import com.scs.web.blog.entity.User;
 import lombok.Data;
 
@@ -21,24 +22,7 @@ public class UserVo {
     private User user;
     private List<Article> articles;
     private List<SimpleUser> simpleUsers;
+//    private List<Topic> topicList;
+//    private List<User> fansList;
 
-//    private Long id;
-//    private String mobile;
-//    private String password;
-//    private String nickname;
-//    private String avatar;
-//    private String gender;
-//    private LocalDate birthday;
-//    private String address;
-//    private String introduction;
-//    private String banner;
-//    private String email;
-//    private String homepage;
-//    private Short follows;
-//    private Short fans;
-//    private Short articles;
-//    private LocalDateTime createTime;
-//    private Short status;
-//    private List<Article> articleList;
-//    private List<SimpleUser> simpleUserList;
 }

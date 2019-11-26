@@ -3,7 +3,9 @@ package com.scs.web.blog.controller;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.scs.web.blog.domain.dto.UserDto;
+import com.scs.web.blog.entity.User;
 import com.scs.web.blog.factory.ServiceFactory;
+import com.scs.web.blog.listener.MySessionContext;
 import com.scs.web.blog.service.UserService;
 import com.scs.web.blog.util.Message;
 import com.scs.web.blog.util.ResponseObject;
@@ -15,9 +17,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +32,7 @@ import java.util.Map;
  * @Date 2019/11/9
  * @Version 1.0
  **/
-@WebServlet(urlPatterns = {"/api/sign-in","/api/register","/api/hot", "/api/detail/*"})
+@WebServlet(urlPatterns = {"/api/sign-in","/api/register","/api/user/hot", "/api/detail/*","/api/user"})
 public class UserController extends HttpServlet {
     private static Logger logger = LoggerFactory.getLogger(UserController.class);
     private UserService userService = ServiceFactory.getUserServiceInstance();
@@ -38,7 +42,8 @@ public class UserController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //去掉了地址共同的前缀，对不同的部分进行分发
         String uri = req.getRequestURI().trim();
-        if ("/api".equals(uri)) {
+        System.out.println(uri);
+        if (uri.contains("/api/user/")) {
             String page = req.getParameter("page");
             String keywords = req.getParameter("keywords");
             String count = req.getParameter("count");
@@ -49,8 +54,8 @@ public class UserController extends HttpServlet {
             } else {
                 getHotUser(req, resp);
             }
-        } else {
-            getUser(req, resp);
+        } else if (uri.contains("/api/detail/")) {
+                getUser(req, resp);
         }
     }
 
@@ -81,15 +86,20 @@ public class UserController extends HttpServlet {
 
 
     private void getUser(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String info = req.getPathInfo().trim();
+        ResponseObject ro = null;
+        List<Object> list = null;
+        String requestPath = req.getRequestURI().trim();
         //取得路径参数
-        String id = info.substring(info.indexOf("/") + 1);
+        String id = requestPath.substring(requestPath.lastIndexOf("/") + 1);
         Gson gson = new GsonBuilder().create();
-        Result result = (Result) userService.userById(Long.parseLong(id));
+        list = userService.userById(Long.valueOf(id));
+        ro = ResponseObject.success(resp.getStatus(), resp.getStatus() == 200 ? "成功" : "失败", list);
         PrintWriter out = resp.getWriter();
-        out.print(gson.toJson(result));
+        out.print(gson.toJson(ro));
         out.close();
     }
+
+
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -103,14 +113,26 @@ public class UserController extends HttpServlet {
         Gson gson = new GsonBuilder().create();
         UserDto userDto = gson.fromJson(stringBuilder.toString(), UserDto.class);
 
+        String inputCode = userDto.getCode().trim();
+
         Map<String, Object> map = null;
+        String sessionId = req.getHeader("Access-Token");
+        System.out.println("客户端传来的JSESSIONID：" + sessionId);
+        MySessionContext myc = MySessionContext.getInstance();
+        HttpSession session = myc.getSession(sessionId);
+        String correctCode = session.getAttribute("code").toString().replace("  ", "");
+        System.out.println("正确的验证码：" + correctCode);
         // 获取请求路径
         String requestPath = req.getRequestURI().trim();
         System.out.println(requestPath);
+        PrintWriter out = resp.getWriter();
         switch (requestPath) {
             case "/api/sign-in":
                 System.out.println("进入登录");
                 map = userService.signIn(userDto);
+                if (!inputCode.equalsIgnoreCase(correctCode)) {
+                    map.put("msg", "验证码错误");
+                }
                 break;
             case "/api/register":
                 System.out.println("进入注册");
@@ -132,9 +154,6 @@ public class UserController extends HttpServlet {
         }
 
 
-
-
-        PrintWriter out = resp.getWriter();
         out.print(gson.toJson(ro));
         out.close();
     }

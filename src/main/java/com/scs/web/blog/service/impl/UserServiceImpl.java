@@ -87,8 +87,9 @@ public class UserServiceImpl implements UserService {
             //成功并返回数据
             return Result.success(userList);
         }
-        //失败，不返回数据
-        return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
+        else {
+            return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
+        }
     }
 
 
@@ -112,9 +113,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<Object> userById(Long id) {
         User user = null;
-        List<Article> articleList = new ArrayList<>();
-        List<Object> list = new ArrayList<>();
-        try {
+            List<Article> articleList = new ArrayList<>();
+            List<Object> list = new ArrayList<>();
+            try {
             user = userDao.getUserById(id);
             articleList = userDao.getArticleById(id);
             list.add(user);

@@ -41,32 +41,33 @@ public class TopicServiceImpl implements TopicService {
         return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
     }
 
-//    @Override
-//    public Result getPageTopics(int currentPage, int pageCount) {
-//        return null;
-//    }
-//
-//    @Override
-//    public Result getTopic(long id) {
-//        TopicVo topicVo = null;
-//        try {
-//            topicVo = topicDao.getTopic(id);
-//        } catch (SQLException e) {
-//            logger.error("根据id获取专题详情出现异常");
-//        }
-//        if (topicVo != null) {
-//            try {
-//                List<ArticleVo> articleVoList = articleDao.selectByTopicId(topicVo.getId());
-//                topicVo.setArticleList(articleVoList);
-//
-//            } catch (SQLException e) {
-//                logger.error("根据专题id获取所有文章出现异常");
-//            }
-//            return Result.success(topicVo);
-//        } else {
-//            return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
-//       }
-//    }
+    @Override
+    public Result getPageTopics(int currentPage, int pageCount) {
+        return null;
+    }
+
+
+    @Override
+    public Result getTopic(long id) {
+        TopicVo topicVo = null;
+        try {
+            topicVo = topicDao.getTopic(id);
+        } catch (SQLException e) {
+            logger.error("根据id获取专题详情出现异常");
+        }
+        if (topicVo != null) {
+            try {
+                List<ArticleVo> articleVoList = articleDao.selectByTopicId(topicVo.getId());
+                topicVo.setArticleList(articleVoList);
+
+            } catch (SQLException e) {
+                logger.error("根据专题id获取所有文章出现异常");
+            }
+            return Result.success(topicVo);
+        } else {
+            return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
+       }
+    }
 
     @Override
     public Result selectByKeywords(String keywords) {

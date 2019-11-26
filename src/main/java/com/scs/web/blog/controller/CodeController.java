@@ -25,6 +25,7 @@ public class CodeController extends HttpServlet {
         //存入session
         HttpSession session = req.getSession();
         session.setAttribute("code",code);
+        resp.setHeader("Access-Token",session.getId());
         //存入全局
         BufferedImage img = ImageUtil.getImage(code,200,100);
         resp.addCookie(new Cookie("sessionId",session.getId()));

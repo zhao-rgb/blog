@@ -26,4 +26,5 @@ public class TopicVo {
     private List<ArticleVo> articleList;
     private SimpleUser simpleUser;
     private List<SimpleUser> simpleUsers;
+
 }

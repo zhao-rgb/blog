@@ -14,6 +14,12 @@ import java.util.List;
  * @Version 1.0
  **/
 public interface ArticleService {
+
+    /**
+     * 初始化图书信息
+     * @return
+     */
+    List<Article> initArticle();
     /**
      * 获取热门文章
      * @return
@@ -29,13 +35,11 @@ public interface ArticleService {
     Result getArticlesByPage(int currentPage, int count);
 
     /**
-     * 获取文章详情
-     *
-     * @param id
+     * 获取指定id的文章信息
+     * @param id 指定文章id
      * @return
      */
-    Result getArticle(long id);
-
+    Article articleById(Long id);
 
     /**
      * 根据标题或摘要模糊查询文章

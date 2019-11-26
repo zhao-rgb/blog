@@ -23,30 +23,27 @@ import java.io.PrintWriter;
  * @Date 2019/11/17
  * @Version 1.0
  **/
-@WebServlet(urlPatterns = {"/api/topic/*"})
+@WebServlet(urlPatterns = {"/api/topic/*","/api/topic/hot"})
 public class TopicController extends HttpServlet {
     private TopicService topicService = ServiceFactory.getTopicServiceInstance();
-
     private static Logger logger = LoggerFactory.getLogger(TopicController.class);
-
-    private String getPatten(String uri) {
-        int len = "/api/topic".length();
-        return uri.substring(len);
-    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String patten = getPatten(req.getRequestURI());
-        switch (patten) {
-            case "/hot":
+        String uri = req.getRequestURI().trim();
+        if (uri.contains("/api/topic/")) {
+            String page = req.getParameter("page");
+            String keywords = req.getParameter("keywords");
+            String count = req.getParameter("count");
+            if (page != null) {
+                getTopicsByPage(resp, Integer.parseInt(page), Integer.parseInt(count));
+            } else if (keywords != null) {
+                getTopicsByKeywords(resp, keywords);
+            } else {
                 getHotTopics(req, resp);
-                break;
-//            case "/list?page=*":
-//                getPageTopics(req, resp);
-//                break;
-//            case "/*":
-//                getTopic(req, resp);
-//                break;
+            }
+        } else {
+            getTopic(req, resp);
         }
     }
 
@@ -75,14 +72,14 @@ public class TopicController extends HttpServlet {
         out.close();
     }
 
-//    private void getTopic(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        String info = req.getPathInfo().trim();
-//        //取得路径参数
-//        String id = info.substring(info.indexOf("/") + 1);
-//        Gson gson = new GsonBuilder().create();
-//        Result result = topicService.getTopic(Long.parseLong(id));
-//        PrintWriter out = resp.getWriter();
-//        out.print(gson.toJson(result));
-//        out.close();
-//    }
+    private void getTopic(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String info = req.getPathInfo().trim();
+        //取得路径参数
+        String id = info.substring(info.indexOf("/") + 1);
+        Gson gson = new GsonBuilder().create();
+        Result result = topicService.getTopic(Long.parseLong(id));
+        PrintWriter out = resp.getWriter();
+        out.print(gson.toJson(result));
+        out.close();
+    }
 }

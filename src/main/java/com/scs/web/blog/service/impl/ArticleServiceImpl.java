@@ -2,6 +2,7 @@ package com.scs.web.blog.service.impl;
 
 import com.scs.web.blog.dao.ArticleDao;
 import com.scs.web.blog.domain.vo.ArticleVo;
+import com.scs.web.blog.entity.Article;
 import com.scs.web.blog.factory.DaoFactory;
 import com.scs.web.blog.service.ArticleService;
 import com.scs.web.blog.util.ResultCode;
@@ -23,6 +24,20 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleDao articleDao = DaoFactory.getArticleDaoInstance();
     private static Logger logger = LoggerFactory.getLogger(ArticleServiceImpl.class);
 
+
+
+    @Override
+    public List<Article> initArticle() {
+        List<Article> articleList = new ArrayList<>();
+        try {
+            articleList = articleDao.selectAll();
+        } catch (SQLException e) {
+            logger.error("初始化图书信息出错");
+            e.printStackTrace();
+        }
+        logger.info("成功初始化图书信息");
+        return articleList;
+    }
 
     @Override
     public List<ArticleVo> getHotArticles() {
@@ -51,18 +66,17 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Result getArticle(long id) {
-        ArticleVo articleVo = null;
+    public Article articleById(Long id) {
+        Article article = null;
         try {
-            articleVo = articleDao.getArticle(id);
+            article = articleDao.getArticleById(id);
+            if (article != null) {
+                logger.info("成功获取id=" + id + "的文章信息");
+            }
         } catch (SQLException e) {
-            logger.error("根据id查询文章出现异常");
+            logger.error("获取id=" + id + "的文章出错");
         }
-        if (articleVo != null) {
-            return Result.success(articleVo);
-        } else {
-            return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
-        }
+        return article;
     }
 
     @Override

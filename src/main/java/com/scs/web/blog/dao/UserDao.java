@@ -61,7 +61,7 @@ public interface UserDao {
      * @return
      * @throws SQLException
      */
-     User getUserById(Long id) throws SQLException;
+    User getUserById(Long id) throws SQLException;
 
     /**
      * 通过指定id查找用户发表的文章信息

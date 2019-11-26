@@ -14,6 +14,13 @@ import java.util.List;
  * @Version 1.0
  **/
 public interface ArticleDao {
+
+  /**
+   * 初始化文章信息
+   * @return
+   * @throws SQLException
+   */
+  List<Article> selectAll() throws SQLException;
     /**
      * 批量新增文章
      * @param articleList
@@ -58,11 +65,10 @@ public interface ArticleDao {
   List<ArticleVo> selectByTopicId(long topicId) throws SQLException;
 
   /**
-   * 根据id获取文章详情
-   *
-   * @param id
+   * 通过指定id查找文章详细信息
+   * @param id 指定文章id
    * @return
    * @throws SQLException
    */
-  ArticleVo getArticle(long id) throws SQLException;
+  Article getArticleById(Long id) throws SQLException;
 }

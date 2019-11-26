@@ -4,6 +4,7 @@ import com.scs.web.blog.domain.dto.UserDto;
 import com.scs.web.blog.factory.ServiceFactory;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.Map;
 
 public class UserServiceTest {
@@ -15,5 +16,11 @@ public class UserServiceTest {
         map = userService.signIn(userDao);
         System.out.println(map.get("msg"));
         System.out.println(map.get("data"));
+    }
+
+    @Test
+    public void userById() {
+        List<Object> list = userService.userById(23l);
+        System.out.println(list.size());
     }
 }

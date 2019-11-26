@@ -9,10 +9,7 @@ import com.scs.web.blog.util.DbUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -142,22 +139,27 @@ public class ArticleDaoImpl implements ArticleDao {
     }
 
     @Override
-    public ArticleVo getArticle(long id) throws SQLException {
+    public Article getArticleById(Long id) throws SQLException {
         Connection connection = DbUtil.getConnection();
-        String sql = "SELECT a.*,b.topic_name,b.logo,c.nickname,c.avatar " +
-                "FROM t_article a " +
-                "LEFT JOIN t_topic b " +
-                "ON a.topic_id = b.id " +
-                "LEFT JOIN t_user c " +
-                "ON a.user_id = c.id " +
-                "WHERE a.id = ?  ";
+        String sql = "SELECT * FROM t_article WHERE id = ? ";
         PreparedStatement pstmt = connection.prepareStatement(sql);
         pstmt.setLong(1, id);
         ResultSet rs = pstmt.executeQuery();
-        ArticleVo articleVo = convert(rs).get(0);
-        rs.previous();
-        articleVo.setContent(rs.getString("content"));
-        return articleVo;
+        Article article = new Article();
+        while (rs.next()) {
+            article.setId(rs.getLong("id"));
+            article.setUserId(rs.getLong("user_id"));
+//            article.setTopicId(rs.getLong("topic_id"));
+            article.setTitle(rs.getString("title"));
+            article.setContent(rs.getString("content"));
+            article.setCover(rs.getString("cover"));
+            article.setDiamond(rs.getInt("diamond"));
+            article.setComments(rs.getInt("comments"));
+            article.setLikes(rs.getInt("likes"));
+            article.setPublishTime(rs.getTimestamp("publish_time").toLocalDateTime());
+//            article.setText(rs.getString("text"));
+        }
+        return article;
     }
 
     private List<ArticleVo> convert(ResultSet rs) {
@@ -167,7 +169,7 @@ public class ArticleDaoImpl implements ArticleDao {
                 ArticleVo articleVo = new ArticleVo();
                 articleVo.setId(rs.getLong("id"));
                 articleVo.setUserId(rs.getLong("user_id"));
-//                articleVo.setTopicId(rs.getLong("topic_id"));
+                articleVo.setTopicId(rs.getLong("topic_id"));
                 articleVo.setTitle(rs.getString("title"));
 //                articleVo.setThumbnail(rs.getString("thumbnail"));
 //                articleVo.setSummary(rs.getString("summary"));
@@ -184,6 +186,32 @@ public class ArticleDaoImpl implements ArticleDao {
             logger.error("文章数据结果集解析异常");
         }
         return articleVoList;
+    }
+
+    @Override
+    public List<Article> selectAll() throws SQLException {
+        List<Article> articleList = new ArrayList<>();
+        Connection connection = DbUtil.getConnection();
+        String sql = "SELECT * FROM t_article ORDER BY id DESC ";
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        while (rs.next()) {
+            Article article = new Article();
+            article.setId(rs.getLong("id"));
+            article.setUserId(rs.getLong("user_id"));
+//            article.setTopicId(rs.getLong("topic_id"));
+            article.setTitle(rs.getString("title"));
+            article.setContent(rs.getString("content"));
+            article.setCover(rs.getString("cover"));
+            article.setDiamond(rs.getInt("diamond"));
+            article.setComments(rs.getInt("comments"));
+            article.setLikes(rs.getInt("likes"));
+            article.setPublishTime(rs.getTimestamp("publish_time").toLocalDateTime());
+//            article.setText(rs.getString("text"));
+            articleList.add(article);
+        }
+//        DbUtil.close(rs, stmt, connection);
+        return articleList;
     }
 
 }

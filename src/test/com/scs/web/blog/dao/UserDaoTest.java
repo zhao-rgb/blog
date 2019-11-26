@@ -43,7 +43,7 @@ public class UserDaoTest {
         }
     }
     @Test
-    public void getUserById() {
+    public void userById() {
         try {
             User user = userDao.getUserById((long) 1);
             System.out.println(user);
@@ -78,5 +78,12 @@ public class UserDaoTest {
         List<User> userList = userDao.selectByKeywords("董");
         System.out.println(userList.size());
     }
+
+    @Test
+    public void selectHotUsers() throws SQLException {
+        List<User> userList = userDao.selectHotUsers();
+        userList.forEach(System.out::println);
+    }
+
 }
 
