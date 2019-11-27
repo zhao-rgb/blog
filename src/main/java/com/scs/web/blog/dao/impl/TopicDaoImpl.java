@@ -30,12 +30,12 @@ public class TopicDaoImpl implements TopicDao {
     public int[] batchInsert(List<Topic> topicList) throws SQLException {
         Connection connection = DbUtil.getConnection();
         connection.setAutoCommit(false);
-        String sql = "INSERT INTO t_topic (admin_id,name,logo,description,articles,follows,create_time) VALUES (?,?,?,?,?,?,?) ";
+        String sql = "INSERT INTO t_topic (admin_id,topic_name,logo,description,articles,follows,create_time) VALUES (?,?,?,?,?,?,?) ";
         PreparedStatement pstmt = connection.prepareStatement(sql);
         topicList.forEach(topic -> {
             try {
                 pstmt.setLong(1, topic.getAdminId());
-                pstmt.setString(2, topic.getName());
+                pstmt.setString(2, topic.getTopicName());
                 pstmt.setString(3, topic.getLogo());
                 pstmt.setString(4, topic.getDescription());
                 pstmt.setInt(5, topic.getArticles());
@@ -58,7 +58,7 @@ public class TopicDaoImpl implements TopicDao {
         String sql = "SELECT * FROM t_topic ORDER BY follows DESC LIMIT 10 ";
         PreparedStatement pstmt = connection.prepareStatement(sql);
         ResultSet rs = pstmt.executeQuery();
-        List<Topic> topicList = convert(rs);
+        List<Topic> topicList = convertTopic(rs);
         return topicList;
     }
 
@@ -71,7 +71,7 @@ public class TopicDaoImpl implements TopicDao {
         pstmt.setInt(1, (currentPage - 1) * count);
         pstmt.setInt(2, count);
         ResultSet rs = pstmt.executeQuery();
-        List<Topic> topicList = convert(rs);
+        List<Topic> topicList = convertTopic(rs);
         return topicList;
     }
 
@@ -106,24 +106,24 @@ public class TopicDaoImpl implements TopicDao {
     public List<Topic> selectByKeywords(String keywords) throws SQLException {
         Connection connection = DbUtil.getConnection();
         String sql = "SELECT * FROM t_topic " +
-                "WHERE topic_name LIKE ?  OR description LIKE ? ";
+                "WHERE name LIKE ?  OR description LIKE ? ";
         PreparedStatement pstmt = connection.prepareStatement(sql);
         pstmt.setString(1, "%" + keywords + "%");
         pstmt.setString(2, "%" + keywords + "%");
         ResultSet rs = pstmt.executeQuery();
-        List<Topic> topicList = convert(rs);
+        List<Topic> topicList = convertTopic(rs);
 //        DbUtil.close(null, pstmt, connection);
         return topicList;
     }
 
-    private List<Topic> convert(ResultSet rs) {
+    private List<Topic> convertTopic(ResultSet rs) {
         List<Topic> topicList = new ArrayList<>(50);
         try {
             while (rs.next()) {
                 Topic topic = new Topic();
                 topic.setId(rs.getLong("id"));
                 topic.setAdminId(rs.getLong("admin_id"));
-                topic.setName(rs.getString("name"));
+                topic.setTopicName(rs.getString("topic_name"));
                 topic.setLogo(rs.getString("logo"));
                 topic.setDescription(rs.getString("description"));
                 topic.setArticles(rs.getInt("articles"));

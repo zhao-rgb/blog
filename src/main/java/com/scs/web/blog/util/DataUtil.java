@@ -6,12 +6,16 @@ import com.google.gson.GsonBuilder;
 import com.scs.web.blog.domain.dto.City;
 import com.scs.web.blog.domain.dto.Province;
 import com.scs.web.blog.domain.dto.Provinces;
+import com.scs.web.blog.entity.Topic;
+import com.scs.web.blog.factory.DaoFactory;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.*;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -120,6 +124,12 @@ public class DataUtil {
     public static Long getUserrId(){
         Random random = new Random();
         long bound = random.nextInt(61);
+        return bound;
+    }
+
+    public static int getTopicId() {
+        Random random = new Random();
+        int bound = random.nextInt(72)+1;
         return bound;
     }
 

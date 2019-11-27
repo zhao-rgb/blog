@@ -1,1 +1,1 @@
-2019-11-25.15:25:49 INFO  [main] com.scs.web.blog.service.impl.UserServiceImpl.userById:124  成功获取id=23的文章信息
+2019-11-26.20:02:18 INFO  [main] com.scs.web.blog.dao.ArticleDaoTest.batchInsert:20  成功新增99个用户

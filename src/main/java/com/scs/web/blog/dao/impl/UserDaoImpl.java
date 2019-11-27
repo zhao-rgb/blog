@@ -30,28 +30,28 @@ public class UserDaoImpl implements UserDao {
     public int[] batchInsert(List<User> userList) throws SQLException {
         Connection connection = DbUtil.getConnection();
         String sql = "INSERT INTO t_user (mobile,password,nickname,avatar,gender,birthday,introduction,create_time) VALUES (?,?,?,?,?,?,?,?) ";
-        PreparedStatement pstmt = connection.prepareStatement(sql);
+        PreparedStatement pst = connection.prepareStatement(sql);
         connection.setAutoCommit(false);
         userList.forEach(user -> {
             try {
-                pstmt.setString(1, user.getMobile());
-                pstmt.setString(2, user.getPassword());
-                pstmt.setString(3, user.getNickname());
-                pstmt.setString(4, user.getAvatar());
-                pstmt.setString(5, user.getGender());
+                pst.setString(1, user.getMobile());
+                pst.setString(2, user.getPassword());
+                pst.setString(3, user.getNickname());
+                pst.setString(4, user.getAvatar());
+                pst.setString(5, user.getGender());
                 // 日期的设置，可以使用setObject
-                pstmt.setObject(6, user.getBirthday());
-                pstmt.setString(7, user.getIntroduction());
-                pstmt.setObject(8, user.getCreateTime());
-                pstmt.addBatch();
+                pst.setObject(6, user.getBirthday());
+                pst.setString(7, user.getIntroduction());
+                pst.setObject(8, user.getCreateTime());
+                pst.addBatch();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         });
-        int[] result = pstmt.executeBatch();
+        int[] result = pst.executeBatch();
         // 被忘记提交
         connection.commit();
-//        DbUtil.close(null, pstmt, connection);
+        DbUtil.close(connection, pst);
         return result;
 
     }
@@ -74,11 +74,11 @@ public class UserDaoImpl implements UserDao {
     public User findUserByMobile(String mobile) throws SQLException{
         Connection connection = DbUtil.getConnection();
         String sql = "SELECT * FROM t_user WHERE mobile = ? ";
-        PreparedStatement pstmt = connection.prepareStatement(sql);
-        pstmt.setString(1,mobile);
-        ResultSet rs = pstmt.executeQuery();
-        User user = convert(rs).get(0);
-//        DbUtil.close(null, pstmt, connection);
+        PreparedStatement pst = connection.prepareStatement(sql);
+        pst.setString(1,mobile);
+        ResultSet rs = pst.executeQuery();
+        User user = convertUser(rs).get(0);
+        DbUtil.close(connection, pst, rs);
         return user;
     }
 
@@ -88,7 +88,8 @@ public class UserDaoImpl implements UserDao {
         String sql = "SELECT * FROM t_user ORDER BY fans DESC LIMIT 10 ";
         PreparedStatement pst = connection.prepareStatement(sql);
         ResultSet rs = pst.executeQuery();
-        return convert(rs);
+        DbUtil.close(connection, pst, rs);
+        return convertUser(rs);
     }
 
     @Override
@@ -96,12 +97,12 @@ public class UserDaoImpl implements UserDao {
         Connection connection = DbUtil.getConnection();
         String sql = "SELECT * FROM t_user " +
                 "ORDER BY id  LIMIT ?,? ";
-        PreparedStatement pstmt = connection.prepareStatement(sql);
-        pstmt.setInt(1, (currentPage - 1) * count);
-        pstmt.setInt(2, count);
-        ResultSet rs = pstmt.executeQuery();
-        List<User> userList = convert(rs);
-//        DbUtil.close(null, pstmt, connection);
+        PreparedStatement pst = connection.prepareStatement(sql);
+        pst.setInt(1, (currentPage - 1) * count);
+        pst.setInt(2, count);
+        ResultSet rs = pst.executeQuery();
+        List<User> userList = convertUser(rs);
+        DbUtil.close(connection, pst, rs);
         return userList;
     }
 
@@ -109,9 +110,9 @@ public class UserDaoImpl implements UserDao {
     public User getUserById(Long id) throws SQLException {
         Connection connection = DbUtil.getConnection();
         String sql = "SELECT * FROM t_user WHERE id = ? ";
-        PreparedStatement pstmt = connection.prepareStatement(sql);
-        pstmt.setLong(1, id);
-        ResultSet rs = pstmt.executeQuery();
+        PreparedStatement pst = connection.prepareStatement(sql);
+        pst.setLong(1, id);
+        ResultSet rs = pst.executeQuery();
         User user = new User();
         while (rs.next()) {
             user.setId(rs.getLong("id"));
@@ -134,6 +135,7 @@ public class UserDaoImpl implements UserDao {
             user.setAddress(rs.getString("address"));
             user.setStatus(rs.getShort("status"));
         }
+        DbUtil.close(connection, pst, rs);
         return user;
     }
 
@@ -155,7 +157,7 @@ public class UserDaoImpl implements UserDao {
             article.setComments(rs.getInt("comments"));
             article.setLikes(rs.getInt("likes"));
             article.setPublishTime(rs.getTimestamp("publish_time").toLocalDateTime());
-//            article.setText(rs.getString("text"));
+            article.setText(rs.getString("text"));
             articleList.add(article);
         }
         return articleList;
@@ -166,16 +168,16 @@ public class UserDaoImpl implements UserDao {
         Connection connection = DbUtil.getConnection();
         String sql = "SELECT * FROM t_user " +
                 "WHERE nickname LIKE ?  OR introduction LIKE ? ";
-        PreparedStatement pstmt = connection.prepareStatement(sql);
-        pstmt.setString(1, "%" + keywords + "%");
-        pstmt.setString(2, "%" + keywords + "%");
-        ResultSet rs = pstmt.executeQuery();
-        List<User> userList = convert(rs);
-//        DbUtil.close(null, pstmt, connection);
+        PreparedStatement pst = connection.prepareStatement(sql);
+        pst.setString(1, "%" + keywords + "%");
+        pst.setString(2, "%" + keywords + "%");
+        ResultSet rs = pst.executeQuery();
+        List<User> userList = convertUser(rs);
+        DbUtil.close(connection, pst, rs);
         return userList;
     }
 
-    private List<User> convert(ResultSet rs) {
+    private List<User> convertUser(ResultSet rs) {
         List<User> userList = new ArrayList<>(50);
         try {
             while (rs.next()) {
@@ -188,8 +190,6 @@ public class UserDaoImpl implements UserDao {
                 user.setGender(rs.getString("gender"));
                 user.setBirthday(rs.getDate("birthday").toLocalDate());
                 user.setIntroduction(rs.getString("introduction"));
-//                user.setBanner(rs.getString("banner"));
-//                user.setEmail(rs.getString("email"));
                 user.setAddress(rs.getString("address"));
                 user.setFollows(rs.getShort("follows"));
                 user.setFans(rs.getShort("fans"));

@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 public class Article {
     private Long id;
     private Long userId;
+    private Long topicId;
     private String title;
     private String content;
     private String cover;
@@ -22,4 +23,5 @@ public class Article {
     private Integer comments;
     private Integer likes;
     private LocalDateTime publishTime;
+    private String text;
 }

@@ -5,6 +5,7 @@ import com.scs.web.blog.dao.ArticleDao;
 import com.scs.web.blog.domain.vo.ArticleVo;
 import com.scs.web.blog.entity.Article;
 import com.scs.web.blog.util.DataUtil;
+
 import com.scs.web.blog.util.DbUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,19 +28,21 @@ public class ArticleDaoImpl implements ArticleDao {
     @Override
     public int[] batchInsert(List<Article> articleList) throws SQLException {
         Connection connection = DbUtil.getConnection();
-        String sql = "INSERT INTO t_article (user_id,title,content,cover,diamond,comments,likes,publish_time) VALUES(?,?,?,?,?,?,?,?) ";
+        String sql = "INSERT INTO t_article (user_id,topic_id,title,content,cover,diamond,comments,likes,publish_time,text) VALUES(?,?,?,?,?,?,?,?,?,?) ";
         PreparedStatement pstmt = connection.prepareStatement(sql);
         connection.setAutoCommit(false);
         articleList.forEach(article -> {
             try {
                 pstmt.setInt(1, DataUtil.getUserId());
-                pstmt.setString(2, article.getTitle());
-                pstmt.setString(3, article.getContent());
-                pstmt.setString(4, article.getCover());
-                pstmt.setInt(5, article.getDiamond());
-                pstmt.setInt(6, article.getComments());
-                pstmt.setInt(7, article.getLikes());
-                pstmt.setObject(8, article.getPublishTime());
+                pstmt.setInt(2,DataUtil.getTopicId());
+                pstmt.setString(3, article.getTitle());
+                pstmt.setString(4, article.getContent());
+                pstmt.setString(5, article.getCover());
+                pstmt.setInt(6, article.getDiamond());
+                pstmt.setInt(7, article.getComments());
+                pstmt.setInt(8, article.getLikes());
+                pstmt.setObject(9, article.getPublishTime());
+                pstmt.setString(10,article.getText());
                 pstmt.addBatch();
             } catch (SQLException e) {
                 logger.error("批量导入文章信出错");
@@ -47,7 +50,7 @@ public class ArticleDaoImpl implements ArticleDao {
         });
         int[] result = pstmt.executeBatch();
         connection.commit();
-//        DbUtil.close(null, pstmt, connection);
+
         return result;
     }
 
@@ -94,7 +97,7 @@ public class ArticleDaoImpl implements ArticleDao {
         pstmt.setInt(1, (currentPage - 1) * count);
         pstmt.setInt(2, count);
         ResultSet rs = pstmt.executeQuery();
-        List<ArticleVo> articleVos = convert(rs);
+        List<ArticleVo> articleVos = convertArticle(rs);
         return articleVos;
     }
 
@@ -114,7 +117,7 @@ public class ArticleDaoImpl implements ArticleDao {
         pstmt.setString(1, "%" + keywords + "%");
         pstmt.setString(2, "%" + keywords + "%");
         ResultSet rs = pstmt.executeQuery();
-        List<ArticleVo> articleVos = convert(rs);
+        List<ArticleVo> articleVos = convertArticle(rs);
 //        DbUtil.close(null, pstmt, connection);
         return articleVos;
     }
@@ -133,7 +136,7 @@ public class ArticleDaoImpl implements ArticleDao {
         PreparedStatement pstmt = connection.prepareStatement(sql);
         pstmt.setLong(1, topicId);
         ResultSet rs = pstmt.executeQuery();
-        List<ArticleVo> articleVos = convert(rs);
+        List<ArticleVo> articleVos = convertArticle(rs);
 //        DbUtil.close(null, pstmt, connection);
         return articleVos;
     }
@@ -149,7 +152,7 @@ public class ArticleDaoImpl implements ArticleDao {
         while (rs.next()) {
             article.setId(rs.getLong("id"));
             article.setUserId(rs.getLong("user_id"));
-//            article.setTopicId(rs.getLong("topic_id"));
+            article.setTopicId(rs.getLong("topic_id"));
             article.setTitle(rs.getString("title"));
             article.setContent(rs.getString("content"));
             article.setCover(rs.getString("cover"));
@@ -157,12 +160,12 @@ public class ArticleDaoImpl implements ArticleDao {
             article.setComments(rs.getInt("comments"));
             article.setLikes(rs.getInt("likes"));
             article.setPublishTime(rs.getTimestamp("publish_time").toLocalDateTime());
-//            article.setText(rs.getString("text"));
+            article.setText(rs.getString("text"));
         }
         return article;
     }
 
-    private List<ArticleVo> convert(ResultSet rs) {
+    private List<ArticleVo> convertArticle(ResultSet rs) {
         List<ArticleVo> articleVoList = new ArrayList<>();
         try {
             while (rs.next()) {

@@ -75,7 +75,6 @@ public class JSoupSpider {
             Elements mainList = document.getElementsByClass("main review-item");
             mainList.forEach(item -> {
                 String cover = item.child(0).child(0).attr("src");
-                String nickName = item.child(1).child(1).text();
                 String publishTime = null;
                 if (item.child(1).children().size() == 4) {
                     publishTime = item.child(1).child(3).text();
@@ -91,13 +90,31 @@ public class JSoupSpider {
 
                 Article article = new Article();
                 article.setTitle(title);
-                article.setContent(content);
+                article.setContent(content.substring(0, content.length()-4));
                 article.setCover(cover);
                 article.setDiamond(new Random().nextInt(100));
 
                 article.setComments(Integer.valueOf(comments));
                 article.setLikes(Integer.valueOf(likes));
                 article.setPublishTime(Timestamp.valueOf(publishTime).toLocalDateTime());
+
+
+                String textUrl = item.child(2).child(0).child(0).attr("href");
+                Document document1 = null;
+                try {
+                    document1 = Jsoup.connect(textUrl).get();
+                } catch (IOException e) {
+                    logger.error("连接失败");
+                }
+                Elements re = document1.getElementsByClass("review-content clearfix");
+                Elements ps = re.get(0).select("p");
+                StringBuilder textHtml = new StringBuilder();
+                ps.forEach(p -> {
+                    if (!p.text().equals("")) {
+                        textHtml.append(p);
+                    }
+                });
+                article.setText(textHtml.toString());
                 articleList.add(article);
             });
             j++;
@@ -134,7 +151,7 @@ public class JSoupSpider {
 
                 topic.setAdminId(DataUtil.getUserrId());
 
-                topic.setName(name.text());
+                topic.setTopicName(name.text());
                 topic.setLogo(logo.attr("src"));
                 topic.setDescription(description.text());
                 String[] str = StringUtil.getDigital(articles.text());

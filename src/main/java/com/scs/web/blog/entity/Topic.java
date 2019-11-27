@@ -16,7 +16,7 @@ public class Topic {
     private Long id;
     //管理员id
     private Long adminId;
-    private String name;
+    private String topicName;
     private String logo;
     private String description;
     private Integer articles;
