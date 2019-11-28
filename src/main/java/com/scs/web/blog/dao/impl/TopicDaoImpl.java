@@ -106,13 +106,13 @@ public class TopicDaoImpl implements TopicDao {
     public List<Topic> selectByKeywords(String keywords) throws SQLException {
         Connection connection = DbUtil.getConnection();
         String sql = "SELECT * FROM t_topic " +
-                "WHERE name LIKE ?  OR description LIKE ? ";
-        PreparedStatement pstmt = connection.prepareStatement(sql);
-        pstmt.setString(1, "%" + keywords + "%");
-        pstmt.setString(2, "%" + keywords + "%");
-        ResultSet rs = pstmt.executeQuery();
+                "WHERE topic_name LIKE ?  OR description LIKE ? ";
+        PreparedStatement pst = connection.prepareStatement(sql);
+        pst.setString(1, "%" + keywords + "%");
+        pst.setString(2, "%" + keywords + "%");
+        ResultSet rs = pst.executeQuery();
         List<Topic> topicList = convertTopic(rs);
-//        DbUtil.close(null, pstmt, connection);
+        DbUtil.close(connection, pst, rs);
         return topicList;
     }
 

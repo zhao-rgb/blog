@@ -27,7 +27,7 @@ public class CodeController extends HttpServlet {
         session.setAttribute("code",code);
         resp.setHeader("Access-Token",session.getId());
         //存入全局
-        BufferedImage img = ImageUtil.getImage(code,200,100);
+        BufferedImage img = ImageUtil.getImage(code,100,50);
         resp.addCookie(new Cookie("sessionId",session.getId()));
         //设置resp的响应内容类型
         resp.setContentType("image/jpg");

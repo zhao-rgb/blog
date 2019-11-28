@@ -32,51 +32,6 @@ public class ArticleController extends HttpServlet {
     private static Logger logger = LoggerFactory.getLogger(ArticleController.class);
     private ArticleService articleService = ServiceFactory.getArticleServiceInstance();
 
-//    @Override
-//    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        Gson gson = new GsonBuilder().create();
-//        ResponseObject ro = ResponseObject.success(200, "成功", articleService.getHotArticles());
-//        PrintWriter out = resp.getWriter();
-//        out.print(gson.toJson(ro));
-//        out.close();
-//    }
-//    private void getHotArticles(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        Gson gson = new GsonBuilder().create();
-//        Result result = (Result) articleService.getHotArticles();
-//        PrintWriter out = resp.getWriter();
-//        out.print(gson.toJson(result));
-//        out.close();
-//    }
-//
-//    private void getArticlesByPage(HttpServletResponse resp, int page, int count) throws ServletException, IOException {
-//        Gson gson = new GsonBuilder().create();
-//        Result result = articleService.getArticlesByPage(page, count);
-//        PrintWriter out = resp.getWriter();
-//        out.print(gson.toJson(result));
-//        out.close();
-//    }
-//
-//    private void getArticlesByKeywords(HttpServletResponse resp, String keywords) throws ServletException, IOException {
-//        Gson gson = new GsonBuilder().create();
-//        Result result = articleService.selectByKeywords(keywords);
-//        PrintWriter out = resp.getWriter();
-//        out.print(gson.toJson(result));
-//        out.close();
-//    }
-
-//    private void getArticle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        String info = req.getPathInfo().trim();
-//        //取得路径参数
-//        String id = info.substring(info.indexOf("/") + 1);
-//        Result result = articleService.getArticle(Long.parseLong(id));
-//        Gson gson = new GsonBuilder().create();
-//        PrintWriter out = resp.getWriter();
-//        out.print(gson.toJson(result));
-//        out.close();
-//    }
-
-
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String requestPath = req.getRequestURI();
@@ -95,8 +50,8 @@ public class ArticleController extends HttpServlet {
                 break;
             default:
                 String id = requestPath.substring(requestPath.lastIndexOf("/") + 1);
-                article = articleService.articleById(Long.valueOf(id));
-                ro = ResponseObject.success(resp.getStatus(), resp.getStatus() == 200 ? "成功" : "失败", article);
+                articleVoList = articleService.articleById(Long.valueOf(id));
+                ro = ResponseObject.success(resp.getStatus(), resp.getStatus() == 200 ? "成功" : "失败", articleVoList);
         }
         PrintWriter out = resp.getWriter();
         Gson gson = new GsonBuilder().create();

@@ -23,7 +23,7 @@ import java.io.PrintWriter;
  * @Date 2019/11/17
  * @Version 1.0
  **/
-@WebServlet(urlPatterns = {"/api/topic/*","/api/topic/hot"})
+@WebServlet(urlPatterns = {"/api/topic/detail/*","/api/topic/hot"})
 public class TopicController extends HttpServlet {
     private TopicService topicService = ServiceFactory.getTopicServiceInstance();
     private static Logger logger = LoggerFactory.getLogger(TopicController.class);

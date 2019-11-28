@@ -66,17 +66,14 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Article articleById(Long id) {
-        Article article = null;
+    public List<ArticleVo> articleById(Long id) {
+        List<ArticleVo> articleVoList = new ArrayList<>(20);
         try {
-            article = articleDao.getArticleById(id);
-            if (article != null) {
-                logger.info("成功获取id=" + id + "的文章信息");
-            }
+            articleVoList = articleDao.getArticleById(id);
         } catch (SQLException e) {
             logger.error("获取id=" + id + "的文章出错");
         }
-        return article;
+        return articleVoList;
     }
 
     @Override

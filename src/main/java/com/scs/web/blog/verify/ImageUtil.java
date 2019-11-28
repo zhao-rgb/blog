@@ -24,7 +24,7 @@ public class ImageUtil {
         g.setColor(bgColor);
         g.fillRect(0,0,width,height);
         g.setPaint(foreColor);
-        g.drawString(content,100,50);
+        g.drawString(content,50,25);
         return  img;
     }
 

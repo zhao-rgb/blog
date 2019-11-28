@@ -32,7 +32,7 @@ import java.util.Map;
  * @Date 2019/11/9
  * @Version 1.0
  **/
-@WebServlet(urlPatterns = {"/api/sign-in","/api/register","/api/user/hot", "/api/detail/*","/api/user","/api/user/*"})
+@WebServlet(urlPatterns = {"/api/sign-in","/api/register","/api/user/hot", "/api/detail/*","/api/user"})
 public class UserController extends HttpServlet {
     private static Logger logger = LoggerFactory.getLogger(UserController.class);
     private UserService userService = ServiceFactory.getUserServiceInstance();

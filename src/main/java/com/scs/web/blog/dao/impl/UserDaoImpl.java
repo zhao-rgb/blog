@@ -88,7 +88,7 @@ public class UserDaoImpl implements UserDao {
         String sql = "SELECT * FROM t_user ORDER BY fans DESC LIMIT 10 ";
         PreparedStatement pst = connection.prepareStatement(sql);
         ResultSet rs = pst.executeQuery();
-        DbUtil.close(connection, pst, rs);
+//        DbUtil.close(connection, pst, rs);
         return convertUser(rs);
     }
 

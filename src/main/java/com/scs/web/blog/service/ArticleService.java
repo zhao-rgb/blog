@@ -39,7 +39,7 @@ public interface ArticleService {
      * @param id 指定文章id
      * @return
      */
-    Article articleById(Long id);
+    List<ArticleVo> articleById(Long id);
 
     /**
      * 根据标题或摘要模糊查询文章
