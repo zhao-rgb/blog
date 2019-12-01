@@ -52,7 +52,7 @@ public interface UserService {
      * 根据昵称或简介模糊搜索用户
      *
      * @param keywords
-     * @return
+     * @return Result
      */
     Result selectByKeywords(String keywords);
 }

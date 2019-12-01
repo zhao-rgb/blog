@@ -76,7 +76,7 @@ public class UserDaoTest {
     @Test
     public void selectByKeywords() throws SQLException{
         List<User> userList = userDao.selectByKeywords("二");
-        System.out.println(userList.size());
+        System.out.println(userList.get(0).getNickname());
     }
 
     @Test

@@ -177,7 +177,7 @@ public class UserDaoImpl implements UserDao {
         return userList;
     }
 
-    private List<User> convertUser(ResultSet rs) {
+    public  static List<User> convertUser(ResultSet rs) {
         List<User> userList = new ArrayList<>(50);
         try {
             while (rs.next()) {
