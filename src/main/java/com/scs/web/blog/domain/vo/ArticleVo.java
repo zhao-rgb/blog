@@ -1,7 +1,11 @@
 package com.scs.web.blog.domain.vo;
 
 import com.scs.web.blog.entity.Article;
+import com.scs.web.blog.entity.Topic;
+import com.scs.web.blog.entity.User;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -28,6 +32,9 @@ public class ArticleVo {
 
     private String nickname;
     private String avatar;
+
     private Article article;
+    private User author;
+    private Topic topic;
 
 }

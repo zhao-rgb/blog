@@ -116,7 +116,7 @@ public class TopicDaoImpl implements TopicDao {
         return topicList;
     }
 
-    private List<Topic> convertTopic(ResultSet rs) {
+   public static List<Topic> convertTopic(ResultSet rs) {
         List<Topic> topicList = new ArrayList<>(50);
         try {
             while (rs.next()) {

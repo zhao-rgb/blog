@@ -23,7 +23,7 @@ import java.io.PrintWriter;
  * @Date 2019/11/17
  * @Version 1.0
  **/
-@WebServlet(urlPatterns = {"/api/topic/detail/*","/api/topic/hot"})
+@WebServlet(urlPatterns = {"/api/topic/detail/*","/api/topic/hot","/api/topic/*"})
 public class TopicController extends HttpServlet {
     private TopicService topicService = ServiceFactory.getTopicServiceInstance();
     private static Logger logger = LoggerFactory.getLogger(TopicController.class);
@@ -31,6 +31,7 @@ public class TopicController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String uri = req.getRequestURI().trim();
+        System.out.println(uri);
         if (uri.contains("/api/topic/")) {
             String page = req.getParameter("page");
             String keywords = req.getParameter("keywords");
@@ -38,11 +39,12 @@ public class TopicController extends HttpServlet {
             if (page != null) {
                 getTopicsByPage(resp, Integer.parseInt(page), Integer.parseInt(count));
             } else if (keywords != null) {
+                System.out.println(keywords);
                 getTopicsByKeywords(resp, keywords);
             } else {
                 getHotTopics(req, resp);
             }
-        } else {
+        } else if (uri.contains("/api/topic/detail/")){
             getTopic(req, resp);
         }
     }
@@ -64,7 +66,7 @@ public class TopicController extends HttpServlet {
         out.close();
     }
 
-    private void getTopicsByKeywords(HttpServletResponse resp, String keywords) throws ServletException, IOException {
+    private void getTopicsByKeywords(HttpServletResponse resp, String keywords) throws IOException {
         Gson gson = new GsonBuilder().create();
         Result result = topicService.selectByKeywords(keywords);
         PrintWriter out = resp.getWriter();
@@ -81,5 +83,9 @@ public class TopicController extends HttpServlet {
         PrintWriter out = resp.getWriter();
         out.print(gson.toJson(result));
         out.close();
+    }
+    @Override
+    public void init() throws ServletException {
+        logger.info("TopicController初始化");
     }
 }

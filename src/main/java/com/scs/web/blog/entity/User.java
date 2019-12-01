@@ -1,5 +1,8 @@
 package com.scs.web.blog.entity;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -11,6 +14,8 @@ import java.time.LocalDateTime;
  * @Version 1.0
  **/
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
     private Long id;
     private String mobile;

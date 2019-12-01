@@ -4,7 +4,9 @@ import com.scs.web.blog.domain.dto.SimpleUser;
 import com.scs.web.blog.entity.Article;
 import com.scs.web.blog.entity.Topic;
 import com.scs.web.blog.entity.User;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

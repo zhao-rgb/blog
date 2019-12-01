@@ -1,5 +1,8 @@
 package com.scs.web.blog.util;
 
+import com.scs.web.blog.domain.vo.ArticleVo;
+import com.scs.web.blog.entity.Article;
+import com.scs.web.blog.entity.Topic;
 import com.scs.web.blog.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,4 +48,48 @@ public class BeanHandler {
 //        }
 //        return userList;
 //    }
+
+    public static List<ArticleVo> convertArticle(ResultSet rs) {
+        List<ArticleVo> articleVoList = new ArrayList<>();
+        try {
+            while (rs.next()) {
+                ArticleVo articleVo = new ArticleVo();
+                //文章自身信息
+                Article article = new Article();
+                article.setId(rs.getLong("id"));
+                article.setUserId(rs.getLong("user_id"));
+                article.setTopicId(rs.getLong("topic_id"));
+                article.setTitle(rs.getString("title"));
+                article.setContent(rs.getString("content"));
+                article.setCover(rs.getString("cover"));
+//                article.setDiamond(rs.getLong("diamond"));
+                article.setLikes(rs.getInt("likes"));
+                article.setComments(rs.getInt("comments"));
+                article.setPublishTime(rs.getTimestamp("public_time").toLocalDateTime());
+
+//                //作者信息
+//                User author = new User();
+//                author.setId(rs.getLong("user_id"));
+//                author.setNickname(rs.getString("nickname"));
+//                author.setAvatar(rs.getString("avatar"));
+//
+//                //专题信息
+//                Topic topic = new Topic();
+//                topic.setId(rs.getLong("topic_id"));
+//                topic.setTopicName(rs.getString("topic_name"));
+//                topic.setLogo(rs.getString("logo"));
+//
+//                //给文章视图对象设置三块内容
+//                articleVo.setArticle(article);
+//                articleVo.setAuthor(author);
+//                articleVo.setTopic(topic);
+//                //加入列表
+                articleVo.setArticle(article);
+                articleVoList.add(articleVo);
+            }
+        } catch (SQLException e) {
+            logger.error("文章数据结果集解析异常");
+        }
+        return articleVoList;
+    }
 }

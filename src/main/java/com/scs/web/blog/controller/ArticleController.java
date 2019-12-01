@@ -27,7 +27,7 @@ import java.util.List;
  * @Date 2019/11/15
  * @Version 1.0
  **/
-@WebServlet(urlPatterns = {"/api/article","/api/article/hot", "/api/article/detail/*"})
+@WebServlet(urlPatterns = {"/api/article","/api/article/*", "/api/article/detail/*"})
 public class ArticleController extends HttpServlet {
     private static Logger logger = LoggerFactory.getLogger(ArticleController.class);
     private ArticleService articleService = ServiceFactory.getArticleServiceInstance();
@@ -39,6 +39,15 @@ public class ArticleController extends HttpServlet {
         List<Article> articleList = null;
         List<ArticleVo> articleVoList = null;
         Article article = null;
+        String uri = req.getRequestURI().trim();
+        System.out.println(uri);
+        if (uri.contains("/api/article/")) {
+            String keywords = req.getParameter("keywords");
+            if (keywords != null) {
+                System.out.println(keywords);
+                getArticleByKeywords(resp, keywords);
+            }
+        }
         switch (requestPath) {
             case "/api/article":
                 articleList = articleService.initArticle();
@@ -56,6 +65,16 @@ public class ArticleController extends HttpServlet {
         PrintWriter out = resp.getWriter();
         Gson gson = new GsonBuilder().create();
         out.print(gson.toJson(ro));
+        out.close();
+
+
+    }
+
+    private void getArticleByKeywords(HttpServletResponse resp, String keywords) throws IOException {
+        Gson gson = new GsonBuilder().create();
+        Result result = articleService.selectByKeywords(keywords);
+        PrintWriter out = resp.getWriter();
+        out.print(gson.toJson(result));
         out.close();
     }
 

@@ -4,6 +4,7 @@ package com.scs.web.blog.dao.impl;
 import com.scs.web.blog.dao.ArticleDao;
 import com.scs.web.blog.domain.vo.ArticleVo;
 import com.scs.web.blog.entity.Article;
+import com.scs.web.blog.util.BeanHandler;
 import com.scs.web.blog.util.DataUtil;
 
 import com.scs.web.blog.util.DbUtil;
@@ -118,7 +119,7 @@ public class ArticleDaoImpl implements ArticleDao {
         pst.setString(2, "%" + keywords + "%");
         ResultSet rs = pst.executeQuery();
         List<ArticleVo> articleVos = convertArticle(rs);
-        DbUtil.close(connection, pst);
+        DbUtil.close(connection, pst,rs);
         return articleVos;
     }
 
@@ -158,7 +159,7 @@ public class ArticleDaoImpl implements ArticleDao {
         return articleVo;
     }
 
-    private List<ArticleVo> convertArticle(ResultSet rs) {
+    public static List<ArticleVo> convertArticle(ResultSet rs) {
         List<ArticleVo> articleVoList = new ArrayList<>();
         try {
             while (rs.next()) {
