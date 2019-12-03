@@ -42,15 +42,15 @@ public class UserDaoTest {
             logger.error("新增一名用户失败！");
         }
     }
-    @Test
-    public void userById() {
-        try {
-            User user = userDao.getUserById((long) 1);
-            System.out.println(user);
-        } catch (SQLException e) {
-            logger.error("查询指定id用户出错");
-        }
-    }
+//    @Test
+//    public void userById() {
+//        try {
+//            User user = userDao.getUserById((long) 1);
+//            System.out.println(user);
+//        } catch (SQLException e) {
+//            logger.error("查询指定id用户出错");
+//        }
+//    }
 
     @Test
     public void getArticleById() {
@@ -85,5 +85,10 @@ public class UserDaoTest {
         userList.forEach(System.out::println);
     }
 
+    @Test
+    public void selectByPage() throws SQLException {
+        List<User> userList = userDao.selectByPage(1, 10);
+        userList.forEach(System.out::println);
+    }
 }
 

@@ -1,6 +1,4 @@
-package com.scs.web.blog.verify;
-
-import com.scs.web.blog.util.StringUtil;
+package com.scs.web.blog.util;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

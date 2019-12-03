@@ -23,7 +23,7 @@ import java.io.PrintWriter;
  * @Date 2019/11/17
  * @Version 1.0
  **/
-@WebServlet(urlPatterns = {"/api/topic/detail/*","/api/topic/hot","/api/topic/*"})
+@WebServlet(urlPatterns = {"/api/topics/detail/*","/api/topic/hot","/api/topic/*"})
 public class TopicController extends HttpServlet {
     private TopicService topicService = ServiceFactory.getTopicServiceInstance();
     private static Logger logger = LoggerFactory.getLogger(TopicController.class);
@@ -44,7 +44,7 @@ public class TopicController extends HttpServlet {
             } else {
                 getHotTopics(req, resp);
             }
-        } else if (uri.contains("/api/topic/detail/")){
+        } else if (uri.contains("/api/topics/detail/")){
             getTopic(req, resp);
         }
     }

@@ -56,12 +56,13 @@ public interface UserDao {
     List<User> selectByPage(int currentPage, int count) throws SQLException;
 
     /**
-     * 根据id查询用户详情，包括其他数据
-     *
+     * 根据id查询用户
+     * @param  id
      * @return
      * @throws SQLException
      */
-    User getUserById(Long id) throws SQLException;
+    UserVo getUser(long id) throws SQLException;
+
 
     /**
      * 通过指定id查找用户发表的文章信息

@@ -107,36 +107,17 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User getUserById(Long id) throws SQLException {
+    public UserVo getUser(long id) throws SQLException {
         Connection connection = DbUtil.getConnection();
         String sql = "SELECT * FROM t_user WHERE id = ? ";
         PreparedStatement pst = connection.prepareStatement(sql);
         pst.setLong(1, id);
         ResultSet rs = pst.executeQuery();
-        User user = new User();
-        while (rs.next()) {
-            user.setId(rs.getLong("id"));
-            user.setMobile(rs.getString("mobile"));
-            user.setNickname(rs.getString("nickname"));
-            user.setAvatar(rs.getString("avatar"));
-            user.setGender(rs.getString("gender"));
-            if (rs.getDate("birthday") != null) {
-                user.setBirthday(rs.getDate("birthday").toLocalDate());
-            } else {
-                user.setBirthday(null);
-            }
-            user.setAddress(rs.getString("address"));
-            user.setIntroduction(rs.getString("introduction"));
-            user.setHomepage(rs.getString("homepage"));
-            user.setFollows(rs.getShort("follows"));
-            user.setFans(rs.getShort("fans"));
-            user.setArticles(rs.getShort("articles"));
-            user.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
-            user.setAddress(rs.getString("address"));
-            user.setStatus(rs.getShort("status"));
-        }
+        UserVo userVo = new UserVo();
+        User user = convertUser(rs).get(0);
+        userVo.setUser(user);
         DbUtil.close(connection, pst, rs);
-        return user;
+        return userVo;
     }
 
     @Override

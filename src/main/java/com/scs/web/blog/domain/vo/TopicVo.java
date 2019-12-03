@@ -1,6 +1,8 @@
 package com.scs.web.blog.domain.vo;
 
 import com.scs.web.blog.domain.dto.SimpleUser;
+import com.scs.web.blog.entity.Topic;
+import com.scs.web.blog.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,8 +27,14 @@ public class TopicVo {
     private Integer articles;
     private Integer follows;
     private LocalDateTime createTime;
+
     private List<ArticleVo> articleList;
+
     private SimpleUser simpleUser;
     private List<SimpleUser> simpleUsers;
 
+    private Topic topic;
+    private User admin;
+
+    private List<User> followList;
 }

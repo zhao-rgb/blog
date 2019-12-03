@@ -49,7 +49,7 @@ public class BeanHandler {
 //        return userList;
 //    }
 
-    public static List<ArticleVo> convertArticle(ResultSet rs) {
+    public static List<ArticleVo> convertArticles(ResultSet rs) {
         List<ArticleVo> articleVoList = new ArrayList<>();
         try {
             while (rs.next()) {
@@ -62,29 +62,28 @@ public class BeanHandler {
                 article.setTitle(rs.getString("title"));
                 article.setContent(rs.getString("content"));
                 article.setCover(rs.getString("cover"));
-//                article.setDiamond(rs.getLong("diamond"));
+                article.setDiamond(rs.getInt("diamond"));
                 article.setLikes(rs.getInt("likes"));
                 article.setComments(rs.getInt("comments"));
-                article.setPublishTime(rs.getTimestamp("public_time").toLocalDateTime());
+                article.setPublishTime(rs.getTimestamp("publish_time").toLocalDateTime());
 
-//                //作者信息
-//                User author = new User();
-//                author.setId(rs.getLong("user_id"));
-//                author.setNickname(rs.getString("nickname"));
-//                author.setAvatar(rs.getString("avatar"));
-//
-//                //专题信息
-//                Topic topic = new Topic();
-//                topic.setId(rs.getLong("topic_id"));
-//                topic.setTopicName(rs.getString("topic_name"));
-//                topic.setLogo(rs.getString("logo"));
-//
-//                //给文章视图对象设置三块内容
-//                articleVo.setArticle(article);
-//                articleVo.setAuthor(author);
-//                articleVo.setTopic(topic);
-//                //加入列表
+                //作者信息
+                User author = new User();
+                author.setId(rs.getLong("user_id"));
+                author.setNickname(rs.getString("nickname"));
+                author.setAvatar(rs.getString("avatar"));
+
+                //专题信息
+                Topic topic = new Topic();
+                topic.setId(rs.getLong("topic_id"));
+                topic.setTopicName(rs.getString("topic_name"));
+                topic.setLogo(rs.getString("logo"));
+
+                //给文章视图对象设置三块内容
                 articleVo.setArticle(article);
+                articleVo.setAuthor(author);
+                articleVo.setTopic(topic);
+                //加入列表
                 articleVoList.add(articleVo);
             }
         } catch (SQLException e) {

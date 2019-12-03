@@ -1,6 +1,6 @@
 package com.scs.web.blog.controller;
 import com.scs.web.blog.util.StringUtil;
-import com.scs.web.blog.verify.ImageUtil;
+import com.scs.web.blog.util.ImageUtil;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

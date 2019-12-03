@@ -23,15 +23,21 @@ public class UserServiceTest {
         System.out.println(map.get("data"));
     }
 
-    @Test
-    public void userById() {
-        List<Object> list = userService.userById(23l);
-        System.out.println(list.size());
-    }
+//    @Test
+//    public void userById() {
+//        List<Object> list = userService.userById(23l);
+//        System.out.println(list.size());
+//    }
 
     @Test
     public void selectByKeywords() throws SQLException  {
         Result rs = userService.selectByKeywords("二");
+        System.out.println(rs.getData());
+    }
+
+    @Test
+    public void getUser() {
+        Result rs = userService.getUser(1);
         System.out.println(rs.getData());
     }
 }

@@ -88,16 +88,24 @@ public class UserController extends HttpServlet {
 
 
     private void getUser(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        ResponseObject ro = null;
-        List<Object> list = null;
-        String requestPath = req.getRequestURI().trim();
+//        ResponseObject ro = null;
+//        List<Object> list = null;
+//        String requestPath = req.getRequestURI().trim();
+//        //取得路径参数
+//        String id = requestPath.substring(requestPath.lastIndexOf("/") + 1);
+//        Gson gson = new GsonBuilder().create();
+//        list = (List<Object>) userService.getUser(Long.valueOf(id));
+//        ro = ResponseObject.success(resp.getStatus(), resp.getStatus() == 200 ? "成功" : "失败", list);
+//        PrintWriter out = resp.getWriter();
+//        out.print(gson.toJson(ro));
+//        out.close();
+        String info = req.getPathInfo().trim();
         //取得路径参数
-        String id = requestPath.substring(requestPath.lastIndexOf("/") + 1);
+        String id = info.substring(info.indexOf("/") + 1);
+        Result result = userService.getUser(Long.parseLong(id));
         Gson gson = new GsonBuilder().create();
-        list = userService.userById(Long.valueOf(id));
-        ro = ResponseObject.success(resp.getStatus(), resp.getStatus() == 200 ? "成功" : "失败", list);
         PrintWriter out = resp.getWriter();
-        out.print(gson.toJson(ro));
+        out.print(gson.toJson(result));
         out.close();
     }
 

@@ -71,4 +71,14 @@ public interface ArticleDao {
    * @throws SQLException
    */
   List<ArticleVo> getArticleById(Long id) throws SQLException;
+
+  /**
+   * 根据作者id查询所有文章
+   * @param userId
+   * @return
+   * @throws SQLException
+   */
+  List<ArticleVo> selectByUserId(long userId) throws SQLException;
+
+
 }

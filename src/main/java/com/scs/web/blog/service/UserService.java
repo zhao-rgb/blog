@@ -42,11 +42,11 @@ public interface UserService {
     Result selectByPage(int currentPage,int count);
 
     /**
-     * 获取指定id的用户信息
-     * @param id 指定用户id
-     * @return 返回该用户信息 及 发表的文章信息
+     * 根据id查询用户详情数据
+     * @param id
+     * @return Result
      */
-    List<Object> userById(Long id);
+    Result getUser(long id);
 
     /**
      * 根据昵称或简介模糊搜索用户

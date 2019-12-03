@@ -1,7 +1,9 @@
 package com.scs.web.blog.service.impl;
 
+import com.scs.web.blog.dao.ArticleDao;
 import com.scs.web.blog.dao.UserDao;
 import com.scs.web.blog.domain.dto.UserDto;
+import com.scs.web.blog.domain.vo.ArticleVo;
 import com.scs.web.blog.domain.vo.UserVo;
 import com.scs.web.blog.entity.Article;
 import com.scs.web.blog.entity.User;
@@ -29,6 +31,7 @@ import java.util.Map;
  **/
 public class UserServiceImpl implements UserService {
     private UserDao userDao = DaoFactory.getUserDaoInstance();
+    private ArticleDao articleDao = DaoFactory.getArticleDaoInstance();
     private static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     @Override
     public Map<String, Object> signIn(UserDto userDto){
@@ -111,22 +114,24 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public List<Object> userById(Long id) {
-        User user = null;
-            List<Article> articleList = new ArrayList<>();
-            List<Object> list = new ArrayList<>();
-            try {
-            user = userDao.getUserById(id);
-            articleList = userDao.getArticleById(id);
-            list.add(user);
-            list.add(articleList);
-            if (user != null && articleList.size() > 0) {
-                logger.info("成功获取id=" + id + "的文章信息");
-            }
+    public Result getUser(long id) {
+        UserVo userVo = null;
+
+        try {
+            userVo = userDao.getUser(id);
         } catch (SQLException e) {
-            logger.error("获取id=" + id + "的文章信息出错");
+            logger.error("根据id获取用户详情出现异常");
         }
-        return list;
+        if (userVo != null) {
+            try {
+                List<ArticleVo> articleVoList =articleDao.selectByUserId(id);
+                userVo.setArticleList(articleVoList);
+                return Result.success(userVo);
+            } catch (SQLException e) {
+                logger.error("根据用户id获取文章列表数据出现异常");
+            }
+        }
+        return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
     }
 
     @Override

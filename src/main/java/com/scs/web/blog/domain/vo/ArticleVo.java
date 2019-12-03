@@ -24,7 +24,7 @@ public class ArticleVo {
     private String title;
     private String content;
     private String cover;
-    private String diamond;
+    private Integer diamond;
     private Integer comments;
     private Integer likes;
     private LocalDateTime publishTime;

@@ -27,4 +27,7 @@ public class UserVo {
 //    private List<Topic> topicList;
 //    private List<User> fansList;
 
+    private List<ArticleVo> articleList;
+    private List<Topic> topicList;
+    private List<User> fansList;
 }

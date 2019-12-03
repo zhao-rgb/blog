@@ -74,7 +74,7 @@ public class ArticleDaoImpl implements ArticleDao {
             article.setUserId(rs.getLong("user_id"));
             article.setTitle(rs.getString("title"));
             article.setContent(rs.getString("content"));
-            article.setDiamond(rs.getString("diamond"));
+            article.setDiamond(rs.getInt("diamond"));
             article.setNickname(rs.getString("nickname"));
             article.setAvatar(rs.getString("avatar"));
             article.setLikes(rs.getInt("likes"));
@@ -159,34 +159,7 @@ public class ArticleDaoImpl implements ArticleDao {
         return articleVo;
     }
 
-    public static List<ArticleVo> convertArticle(ResultSet rs) {
-        List<ArticleVo> articleVoList = new ArrayList<>();
-        try {
-            while (rs.next()) {
-                ArticleVo articleVo = new ArticleVo();
-                articleVo.setId(rs.getLong("id"));
-                articleVo.setUserId(rs.getLong("user_id"));
-                articleVo.setTopicId(rs.getLong("topic_id"));
-                articleVo.setTitle(rs.getString("title"));
-                articleVo.setContent(rs.getString("content"));
-                articleVo.setCover(rs.getString("cover"));
-                articleVo.setDiamond(rs.getString("diamond"));
-                articleVo.setComments(rs.getInt("comments"));
-                articleVo.setLikes(rs.getInt("likes"));
-                articleVo.setPublishTime(rs.getTimestamp("publish_time").toLocalDateTime());
-                articleVo.setText(rs.getString("text"));
 
-
-
-                articleVo.setNickname(rs.getString("nickname"));
-                articleVo.setAvatar(rs.getString("avatar"));
-                articleVoList.add(articleVo);
-            }
-        } catch (SQLException e) {
-            logger.error("文章数据结果集解析异常");
-        }
-        return articleVoList;
-    }
 
     @Override
     public List<Article> selectAll() throws SQLException {
@@ -212,6 +185,54 @@ public class ArticleDaoImpl implements ArticleDao {
         }
 //        DbUtil.close(rs, stmt, connection);
         return articleList;
+    }
+
+    @Override
+    public List<ArticleVo> selectByUserId(long userId) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        //从文章、专题、用户表联查出前端需要展示的数据
+        String sql = "SELECT a.*,b.topic_name,b.logo,c.nickname,c.avatar " +
+                "FROM t_article a " +
+                "LEFT JOIN t_topic b " +
+                "ON a.topic_id = b.id " +
+                "LEFT JOIN t_user c " +
+                "ON a.user_id = c.id " +
+                "WHERE a.topic_id = ? ";
+        PreparedStatement pst = connection.prepareStatement(sql);
+        pst.setLong(1, userId);
+        ResultSet rs = pst.executeQuery();
+        List<ArticleVo> articleVos = BeanHandler.convertArticles(rs);
+        DbUtil.close(connection, pst, rs);
+        return articleVos;
+    }
+
+    public static List<ArticleVo> convertArticle(ResultSet rs) {
+        List<ArticleVo> articleVoList = new ArrayList<>();
+        try {
+            while (rs.next()) {
+                ArticleVo articleVo = new ArticleVo();
+                articleVo.setId(rs.getLong("id"));
+                articleVo.setUserId(rs.getLong("user_id"));
+                articleVo.setTopicId(rs.getLong("topic_id"));
+                articleVo.setTitle(rs.getString("title"));
+                articleVo.setContent(rs.getString("content"));
+                articleVo.setCover(rs.getString("cover"));
+                articleVo.setDiamond(rs.getInt("diamond"));
+                articleVo.setComments(rs.getInt("comments"));
+                articleVo.setLikes(rs.getInt("likes"));
+                articleVo.setPublishTime(rs.getTimestamp("publish_time").toLocalDateTime());
+                articleVo.setText(rs.getString("text"));
+
+
+
+                articleVo.setNickname(rs.getString("nickname"));
+                articleVo.setAvatar(rs.getString("avatar"));
+                articleVoList.add(articleVo);
+            }
+        } catch (SQLException e) {
+            logger.error("文章数据结果集解析异常");
+        }
+        return articleVoList;
     }
 
 }
