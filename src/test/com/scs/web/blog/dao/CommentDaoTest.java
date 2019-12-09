@@ -1,7 +1,6 @@
 package com.scs.web.blog.dao;
 
 import com.scs.web.blog.domain.dto.CommentDto;
-import com.scs.web.blog.domain.dto.UserDto;
 import com.scs.web.blog.factory.DaoFactory;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -15,6 +14,7 @@ public class CommentDaoTest {
     @Test
     public void insert() throws SQLException {
         CommentDto commentDto = new CommentDto();
+        commentDto.setNickname("赵");
         commentDto.setContent("12252522");
         int result = commentDao.insert(commentDto);
         if(result == 1) {

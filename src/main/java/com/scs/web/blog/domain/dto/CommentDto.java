@@ -18,5 +18,5 @@ public class CommentDto implements Serializable {
     private String content;
     private LocalDateTime createTime;
     private String code;
-    private int status;
+
 }

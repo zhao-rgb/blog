@@ -3,19 +3,13 @@ package com.scs.web.blog.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.scs.web.blog.domain.dto.City;
-import com.scs.web.blog.domain.dto.Province;
-import com.scs.web.blog.domain.dto.Provinces;
-import com.scs.web.blog.entity.Topic;
-import com.scs.web.blog.factory.DaoFactory;
+
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.*;
 import java.net.URL;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -67,42 +61,42 @@ public class DataUtil {
         return now.minusDays(bound);
     }
 
-    public static String getAddress() {
-        StringBuilder address = new StringBuilder();
-        ClassLoader classLoader = DataUtil.class.getClassLoader();
-        URL resource = classLoader.getResource("https://raw.githubusercontent.com/mqxu/blog/master/src/main/resources/address.json");
-        assert resource != null;
-        String path = resource.getPath();
-        File file = new File(path);
-        Reader reader = null;
-        try {
-            reader = new FileReader(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        assert reader != null;
-        BufferedReader br = new BufferedReader(reader);
-        String line;
-        try {
-            while ((line = br.readLine()) != null) {
-                address.append(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Gson gson = new GsonBuilder().create();
-        Provinces provinces = gson.fromJson(address.toString(), Provinces.class);
-        List<Province> provinceList = provinces.getProvinces();
-        int size = provinceList.size();
-        Random random = new Random();
-        int index = random.nextInt(size);
-        Province province = provinceList.get(index);
-        List<City> cityList = province.getCities();
-        size = cityList.size();
-        index = random.nextInt(size);
-        City city = cityList.get(index);
-        return province.getName() + city.getName();
-    }
+//    public static String getAddress() {
+//        StringBuilder address = new StringBuilder();
+//        ClassLoader classLoader = DataUtil.class.getClassLoader();
+//        URL resource = classLoader.getResource("https://raw.githubusercontent.com/mqxu/blog/master/src/main/resources/address.json");
+//        assert resource != null;
+//        String path = resource.getPath();
+//        File file = new File(path);
+//        Reader reader = null;
+//        try {
+//            reader = new FileReader(file);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        assert reader != null;
+//        BufferedReader br = new BufferedReader(reader);
+//        String line;
+//        try {
+//            while ((line = br.readLine()) != null) {
+//                address.append(line);
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        Gson gson = new GsonBuilder().create();
+//        Provinces provinces = gson.fromJson(address.toString(), Provinces.class);
+//        List<Province> provinceList = provinces.getProvinces();
+//        int size = provinceList.size();
+//        Random random = new Random();
+//        int index = random.nextInt(size);
+//        Province province = provinceList.get(index);
+//        List<City> cityList = province.getCities();
+//        size = cityList.size();
+//        index = random.nextInt(size);
+//        City city = cityList.get(index);
+//        return province.getName() + city.getName();
+//    }
 
     public static int getUserId(){
         Random random = new Random();

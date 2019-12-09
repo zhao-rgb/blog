@@ -26,10 +26,11 @@ public class CommentDaoImpl implements CommentDao {
     @Override
     public int insert(CommentDto commentDto) throws SQLException {
         Connection connection = DbUtil.getConnection();
-        String sql = "INSERT INTO t_comment(content,create_time) VALUES(?,?)";
+        String sql = "INSERT INTO t_comment(nickname,content,create_time) VALUES(?,?,?)";
         PreparedStatement pst = connection.prepareStatement(sql);
-        pst.setString(1,commentDto.getContent());
-        pst.setObject(2, Timestamp.valueOf(LocalDateTime.now()));
+        pst.setString(1,commentDto.getNickname());
+        pst.setString(2,commentDto.getContent());
+        pst.setObject(3, Timestamp.valueOf(LocalDateTime.now()));
         int i = pst.executeUpdate();
         System.out.println("行数为" +i);
         return i;

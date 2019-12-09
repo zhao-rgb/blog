@@ -34,7 +34,7 @@ public class CommentServiceImpl implements CommentService {
         }
         System.out.println("i的值为：" + i);
         if(i == 1){
-            map.put("msg", Message.REGISTER_DEFEATED);
+            map.put("msg", Message.REGISTER_SUCCESS);
             map.put("data",commentDto);
             logger.info("评论成功");
         }else {
