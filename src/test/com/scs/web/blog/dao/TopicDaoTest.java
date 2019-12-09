@@ -24,4 +24,9 @@ public class TopicDaoTest {
         List<Topic> topicList = topicDao.selectByKeywords("小");
         System.out.println(topicList.size());
     }
+
+    @Test
+    public void getTopic() {
+
+    }
 }

@@ -13,4 +13,10 @@ public class TopicServiceTest {
         Result rs = topicService.selectByKeywords("小");
         System.out.println(rs.getData());
     }
+
+    @Test
+    public void getTopic() {
+        Result rs = topicService.getTopic(1);
+        System.out.println(rs.getData());
+    }
 }

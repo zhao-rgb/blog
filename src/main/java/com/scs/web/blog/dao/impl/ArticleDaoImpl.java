@@ -58,14 +58,14 @@ public class ArticleDaoImpl implements ArticleDao {
 
     @Override
     public List<ArticleVo> selectHotArticles() throws SQLException {
-        List<ArticleVo> articleVoList = new ArrayList<>(20);
+        List<ArticleVo> articleVoList = new ArrayList<>(16);
         Connection connection = DbUtil.getConnection();
         //在文章表和用户表联查，得到结视图对象
         String sql = "SELECT a.id,a.user_id,a.title,a.content,a.diamond,a.comments,a.likes,b.id,b.nickname,b.avatar\n" +
                 "FROM t_article a\n" +
                 "LEFT JOIN t_user b\n" +
                 "ON a.user_id = b.id\n" +
-                "ORDER BY a.comments DESC LIMIT 20";
+                "ORDER BY a.comments DESC LIMIT 16";
         PreparedStatement pstmt = connection.prepareStatement(sql);
         ResultSet rs = pstmt.executeQuery();
         while (rs.next()) {

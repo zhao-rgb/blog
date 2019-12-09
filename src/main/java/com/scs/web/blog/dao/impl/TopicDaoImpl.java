@@ -5,6 +5,7 @@ import com.scs.web.blog.dao.TopicDao;
 
 import com.scs.web.blog.domain.vo.TopicVo;
 import com.scs.web.blog.entity.Topic;
+import com.scs.web.blog.entity.User;
 import com.scs.web.blog.util.DbUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,7 +80,7 @@ public class TopicDaoImpl implements TopicDao {
     @Override
     public TopicVo getTopic(long id) throws SQLException {
         Connection connection = DbUtil.getConnection();
-        String sql = "SELECT a.*,b.nickname,b.avatar " +
+        String sql = "SELECT a.*,b.id,b.nickname,b.avatar " +
                 "FROM t_topic a " +
                 "LEFT JOIN t_user b " +
                 "ON a.admin_id = b.id " +
@@ -90,14 +91,23 @@ public class TopicDaoImpl implements TopicDao {
         TopicVo topicVo = null;
         if (rs.next()) {
             topicVo = new TopicVo();
-            topicVo.setId(rs.getLong("id"));
-            topicVo.setAdminId(rs.getLong("admin_id"));
-            topicVo.setTopicName(rs.getString("topic_name"));
-            topicVo.setLogo(rs.getString("logo"));
-            topicVo.setDescription(rs.getString("description"));
-            topicVo.setArticles(rs.getInt("articles"));
-            topicVo.setFollows(rs.getInt("follows"));
-            topicVo.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
+            //专题基本信息
+            Topic topic = new Topic();
+            topic.setId(rs.getLong("id"));
+            topic.setAdminId(rs.getLong("admin_id"));
+            topic.setTopicName(rs.getString("topic_name"));
+            topic.setLogo(rs.getString("logo"));
+            topic.setDescription(rs.getString("description"));
+            topic.setArticles(rs.getInt("articles"));
+            topic.setFollows(rs.getInt("follows"));
+            topic.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
+            topicVo.setTopic(topic);
+            //管理员基本信息
+            User admin = new User();
+            admin.setId(rs.getLong("admin_id"));
+            admin.setNickname(rs.getString("nickname"));
+            admin.setAvatar(rs.getString("avatar"));
+            topicVo.setAdmin(admin);
         }
         return topicVo;
     }

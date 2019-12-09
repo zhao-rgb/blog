@@ -57,7 +57,7 @@ public class TopicServiceImpl implements TopicService {
         }
         if (topicVo != null) {
             try {
-                List<ArticleVo> articleVoList = articleDao.selectByTopicId(topicVo.getId());
+                List<ArticleVo> articleVoList = articleDao.selectByTopicId(topicVo.getTopic().getId());
                 topicVo.setArticleList(articleVoList);
 
             } catch (SQLException e) {
