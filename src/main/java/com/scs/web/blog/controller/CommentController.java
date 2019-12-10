@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,6 +37,24 @@ public class CommentController extends HttpServlet {
     private static Logger logger = LoggerFactory.getLogger(CommentController.class);
     private CommentDao commentDao = DaoFactory.getCommentDaoInstance();
     private CommentService commentService = ServiceFactory.getCommentServiceInstance();
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        CommentService commentService = ServiceFactory.getCommentServiceInstance();
+        List<Comment> comments = commentService.listComment();
+        Gson gson = new Gson();
+        resp.setContentType("application/json;charset=UTF-8");
+        resp.setCharacterEncoding("UTF-8");
+        PrintWriter out = resp.getWriter();
+        ResponseObject ro = null;
+        ro = ResponseObject.success(resp.getStatus(), resp.getStatus() == 200 ? "成功" : "失败", comments);
+        out.print(gson.toJson(ro));
+        out.close();
+    }
+
+
+
+
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

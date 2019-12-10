@@ -23,4 +23,8 @@ public class CommentDaoTest {
             logger.error("失败");
         }
     }
+
+    @Test
+    public void selectAll() {
+    }
 }

@@ -2,15 +2,16 @@ package com.scs.web.blog.service.impl;
 
 import com.scs.web.blog.dao.CommentDao;
 import com.scs.web.blog.domain.dto.CommentDto;
+import com.scs.web.blog.entity.Comment;
 import com.scs.web.blog.factory.DaoFactory;
 import com.scs.web.blog.service.CommentService;
 import com.scs.web.blog.util.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.stream.events.Comment;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,5 +43,16 @@ public class CommentServiceImpl implements CommentService {
         }
 
         return map;
+    }
+
+    @Override
+    public List<Comment> listComment() {
+        List<Comment> comments = null;
+        try {
+            comments=commentDao.selectAll();
+        } catch (SQLException e) {
+            System.err.println("查询所有学生异常");
+        }
+        return comments;
     }
 }
