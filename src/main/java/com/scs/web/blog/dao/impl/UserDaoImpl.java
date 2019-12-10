@@ -145,7 +145,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<User> selectByKeywords(String keywords) throws SQLException {
+     public List<User> selectByKeywords(String keywords) throws SQLException {
         Connection connection = DbUtil.getConnection();
         String sql = "SELECT * FROM t_user " +
                 "WHERE nickname LIKE ?  OR introduction LIKE ? ";

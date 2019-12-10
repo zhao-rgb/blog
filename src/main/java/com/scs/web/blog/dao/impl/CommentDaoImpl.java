@@ -2,6 +2,7 @@ package com.scs.web.blog.dao.impl;
 
 import com.scs.web.blog.dao.CommentDao;
 import com.scs.web.blog.domain.dto.CommentDto;
+import com.scs.web.blog.domain.vo.CommentVo;
 import com.scs.web.blog.entity.Comment;
 import com.scs.web.blog.service.impl.CommentServiceImpl;
 import com.scs.web.blog.util.DbUtil;
@@ -55,6 +56,29 @@ public class CommentDaoImpl implements CommentDao {
             commentList.add(comment);
         }
         return commentList;
+    }
+
+    @Override
+    public CommentVo getComment(long id) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql = "SELECT * FROM t_comment WHERE id = ?";
+        PreparedStatement pst= connection.prepareStatement(sql);
+        pst.setLong(1,id);
+        ResultSet rs = pst.executeQuery();
+        CommentVo commentVo = null;
+       if (rs.next()){
+            commentVo = new CommentVo();
+            Comment comment = new Comment();
+            comment.setId(rs.getLong("id"));
+            comment.setUserId(rs.getLong("user_id"));
+            comment.setArticleId(rs.getLong("article_id"));
+            comment.setNickname(rs.getString("nickname"));
+            comment.setContent(rs.getString("content"));
+            Timestamp timestamp = rs.getTimestamp("create_time");
+            comment.setCreateTime(timestamp.toLocalDateTime());
+            commentVo.setComment(comment);
+        }
+        return commentVo;
     }
 
 }

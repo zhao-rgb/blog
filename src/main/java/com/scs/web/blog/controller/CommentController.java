@@ -32,7 +32,7 @@ import java.util.Map;
  * @Date 2019/12/9
  * @Version 1.0
  **/
-@WebServlet(urlPatterns = {"/api/comment","/api/comment/*"})
+@WebServlet(urlPatterns = {"/api/comment","/api/comment/*","/api/comments"})
 public class CommentController extends HttpServlet {
     private static Logger logger = LoggerFactory.getLogger(CommentController.class);
     private CommentDao commentDao = DaoFactory.getCommentDaoInstance();
@@ -40,7 +40,20 @@ public class CommentController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        CommentService commentService = ServiceFactory.getCommentServiceInstance();
+
+        String uri = req.getRequestURI().trim();
+        System.out.println(uri);
+        if(uri.contains("/api/comments")){
+            listComment(req, resp);
+        }else if(uri.contains("/api/comment")){
+            getComment(req, resp);
+        }
+
+    }
+
+
+
+    private void listComment(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Comment> comments = commentService.listComment();
         Gson gson = new Gson();
         resp.setContentType("application/json;charset=UTF-8");
@@ -51,9 +64,15 @@ public class CommentController extends HttpServlet {
         out.print(gson.toJson(ro));
         out.close();
     }
-
-
-
+    private void getComment(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String info = req.getPathInfo().trim();
+        String id = info.substring(info.indexOf("/") + 1);
+        Result result = commentService.getComment(Long.parseLong(id));
+        Gson gson = new GsonBuilder().create();
+        PrintWriter out = resp.getWriter();
+        out.print(gson.toJson(result));
+        out.close();
+    }
 
 
     @Override

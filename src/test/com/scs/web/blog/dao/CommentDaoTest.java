@@ -1,6 +1,8 @@
 package com.scs.web.blog.dao;
 
 import com.scs.web.blog.domain.dto.CommentDto;
+import com.scs.web.blog.domain.vo.CommentVo;
+import com.scs.web.blog.entity.Comment;
 import com.scs.web.blog.factory.DaoFactory;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -24,7 +26,11 @@ public class CommentDaoTest {
         }
     }
 
+
     @Test
-    public void selectAll() {
+    public void getComment() throws  SQLException{
+        CommentVo comment = commentDao.getComment((long) 1);
+        System.out.println(comment);
     }
+
 }

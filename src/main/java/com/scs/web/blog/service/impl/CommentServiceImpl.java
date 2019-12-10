@@ -2,10 +2,12 @@ package com.scs.web.blog.service.impl;
 
 import com.scs.web.blog.dao.CommentDao;
 import com.scs.web.blog.domain.dto.CommentDto;
+import com.scs.web.blog.domain.vo.CommentVo;
 import com.scs.web.blog.entity.Comment;
 import com.scs.web.blog.factory.DaoFactory;
 import com.scs.web.blog.service.CommentService;
 import com.scs.web.blog.util.Message;
+import com.scs.web.blog.util.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,5 +56,16 @@ public class CommentServiceImpl implements CommentService {
             System.err.println("查询所有学生异常");
         }
         return comments;
+    }
+
+    @Override
+    public Result getComment(long id) {
+        CommentVo commentVo = null;
+        try {
+            commentVo = commentDao.getComment(id);
+        } catch (SQLException e) {
+            logger.error("异常");
+        }
+        return Result.success(commentVo);
     }
 }
