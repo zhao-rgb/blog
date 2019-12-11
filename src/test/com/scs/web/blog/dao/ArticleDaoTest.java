@@ -37,4 +37,21 @@ public class ArticleDaoTest {
     }
 
 
+    @Test
+    public void insert() throws SQLException{
+        Article article = new Article();
+        article.setUserId((long) 1);
+        article.setTopicId((long) 2);
+        article.setTitle("lll");
+        article.setContent("oooo");
+        article.setCover("ioioio");
+        article.setDiamond(3);
+        article.setComments(4);
+        article.setLikes(3);
+        article.setText("kskks");
+        int result = articleDao.insert(article);
+        if(result == 1){
+            logger.info("成功");
+        }
+    }
 }

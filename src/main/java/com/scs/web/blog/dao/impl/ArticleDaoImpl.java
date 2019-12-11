@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -235,6 +236,25 @@ public class ArticleDaoImpl implements ArticleDao {
         return articleVoList;
     }
 
+    @Override
+    public int insert(Article article) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql = "INSERT INTO t_article(user_id,topic_id,title,content,cover,diamond,comments,likes,publish_time,text) VALUES(?,?,?,?,?,?,?,?,?,?)";
+        PreparedStatement pst = connection.prepareStatement(sql);
+        pst.setLong(1, article.getUserId());
+        pst.setLong(2,article.getTopicId());
+        pst.setString(3, article.getTitle());
+        pst.setString(4, article.getContent());
+        pst.setString(5, article.getCover());
+        pst.setInt(6, article.getDiamond());
+        pst.setInt(7, article.getComments());
+        pst.setInt(8, article.getLikes());
+        pst.setObject(9, Timestamp.valueOf(LocalDateTime.now()));
+        pst.setString(10,article.getText());
+        int i =pst.executeUpdate();
+        System.out.println("行数为" +1);
+        return i;
+    }
 }
 
 

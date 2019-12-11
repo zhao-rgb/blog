@@ -5,6 +5,7 @@ import com.scs.web.blog.entity.Article;
 import com.scs.web.blog.util.Result;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhao
@@ -48,4 +49,11 @@ public interface ArticleService {
      * @return
      */
     Result selectByKeywords(String keywords);
+
+    /**
+     *
+     * @param article
+     * @return
+     */
+    Map<String, Object> newarticle(Article article);
 }

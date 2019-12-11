@@ -6,6 +6,7 @@ import com.scs.web.blog.domain.vo.ArticleVo;
 import com.scs.web.blog.entity.Article;
 import com.scs.web.blog.factory.ServiceFactory;
 import com.scs.web.blog.service.ArticleService;
+import com.scs.web.blog.util.Message;
 import com.scs.web.blog.util.ResponseObject;
 import com.scs.web.blog.util.Result;
 import org.slf4j.Logger;
@@ -16,9 +17,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhao
@@ -81,5 +84,42 @@ public class ArticleController extends HttpServlet {
     @Override
     public void init() throws ServletException {
         logger.info("ArticleController初始化");
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String uri = req.getRequestURI().trim();
+        System.out.println(uri);
+        if (uri.contains("/api/article/new")) {
+            Connect(req, resp);
+
+        }
+
+    }
+
+    private void Connect(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+        BufferedReader reader = req.getReader();
+        StringBuilder stringBuilder = new StringBuilder();
+        String line = null;
+        while((line = reader.readLine())!=null){
+            stringBuilder.append(line);
+        }
+        System.out.println(stringBuilder.toString());
+        //将接受到的客户端JSON字符串转成User对象
+        Gson gson = new GsonBuilder().create();
+        Article article = gson.fromJson(stringBuilder.toString(),Article.class);
+        System.out.println(article);
+        Map<String, Object> map =null;
+        map = articleService.newarticle(article);
+        System.out.println(map);
+        String msg = (String) map.get("msg");
+        ResponseObject ro = null;
+        switch (msg){
+            case Message.REGISTER_SUCCESS:
+                ro = ResponseObject.success(200,msg,map.get("data"));
+        }
+        PrintWriter out = resp.getWriter();
+        out.print(gson.toJson(ro));
+        out.close();
     }
 }

@@ -81,4 +81,11 @@ public interface ArticleDao {
   List<ArticleVo> selectByUserId(long userId) throws SQLException;
 
 
+  /**
+   *
+   * @param article
+   * @return
+   * @throws SQLException
+   */
+  int insert(Article article) throws  SQLException;
 }
