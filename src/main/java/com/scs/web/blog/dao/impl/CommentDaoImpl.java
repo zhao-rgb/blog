@@ -4,6 +4,7 @@ import com.scs.web.blog.dao.CommentDao;
 import com.scs.web.blog.domain.dto.CommentDto;
 import com.scs.web.blog.domain.vo.CommentVo;
 import com.scs.web.blog.entity.Comment;
+import com.scs.web.blog.entity.User;
 import com.scs.web.blog.service.impl.CommentServiceImpl;
 import com.scs.web.blog.util.DbUtil;
 import com.scs.web.blog.util.Result;
@@ -27,11 +28,12 @@ public class CommentDaoImpl implements CommentDao {
     @Override
     public int insert(CommentDto commentDto) throws SQLException {
         Connection connection = DbUtil.getConnection();
-        String sql = "INSERT INTO t_comment(nickname,content,create_time) VALUES(?,?,?)";
+        String sql = "INSERT INTO t_comment(user_id,article_id,content,create_time) VALUES(?,?,?,?)";
         PreparedStatement pst = connection.prepareStatement(sql);
-        pst.setString(1,commentDto.getNickname());
-        pst.setString(2,commentDto.getContent());
-        pst.setObject(3, Timestamp.valueOf(LocalDateTime.now()));
+        pst.setLong(1,commentDto.getUserId());
+        pst.setLong(2,commentDto.getArticleId());
+        pst.setString(3,commentDto.getContent());
+        pst.setObject(4, Timestamp.valueOf(LocalDateTime.now()));
         int i = pst.executeUpdate();
         System.out.println("行数为" +i);
         return i;
@@ -59,26 +61,34 @@ public class CommentDaoImpl implements CommentDao {
     }
 
     @Override
-    public CommentVo getComment(long id) throws SQLException {
+    public List<CommentVo> getComment(long articleId) throws SQLException {
         Connection connection = DbUtil.getConnection();
-        String sql = "SELECT * FROM t_comment WHERE id = ?";
+        String sql = "SELECT a.*,b.avatar,b.nickname FROM t_comment a LEFT JOIN t_user b ON a.user_id = b.id WHERE a.article_id = ?";
         PreparedStatement pst= connection.prepareStatement(sql);
-        pst.setLong(1,id);
+        pst.setLong(1,articleId);
         ResultSet rs = pst.executeQuery();
         CommentVo commentVo = null;
-       if (rs.next()){
-            commentVo = new CommentVo();
+        List<CommentVo> commentVoList = new ArrayList<>();
+       while (rs.next()){
             Comment comment = new Comment();
             comment.setId(rs.getLong("id"));
             comment.setUserId(rs.getLong("user_id"));
             comment.setArticleId(rs.getLong("article_id"));
-            comment.setNickname(rs.getString("nickname"));
             comment.setContent(rs.getString("content"));
             Timestamp timestamp = rs.getTimestamp("create_time");
             comment.setCreateTime(timestamp.toLocalDateTime());
+
+            //作者信息
+            User author = new User();
+            author.setNickname(rs.getString("nickname"));
+            author.setAvatar(rs.getString("avatar"));
+
+            commentVo = new CommentVo();
+            commentVo.setAuthor(author);
             commentVo.setComment(comment);
+            commentVoList.add(commentVo);
         }
-        return commentVo;
+        return commentVoList;
     }
 
 }

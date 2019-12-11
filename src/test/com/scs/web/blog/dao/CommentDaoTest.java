@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class CommentDaoTest {
  private  static Logger logger = LoggerFactory.getLogger(CommentDaoTest.class);
@@ -16,7 +17,10 @@ public class CommentDaoTest {
     @Test
     public void insert() throws SQLException {
         CommentDto commentDto = new CommentDto();
-        commentDto.setNickname("赵");
+
+
+        commentDto.setUserId((long) 6);
+        commentDto.setArticleId((long) 4);
         commentDto.setContent("12252522");
         int result = commentDao.insert(commentDto);
         if(result == 1) {
@@ -29,8 +33,8 @@ public class CommentDaoTest {
 
     @Test
     public void getComment() throws  SQLException{
-        CommentVo comment = commentDao.getComment((long) 1);
-        System.out.println(comment);
+        List<CommentVo> commentVoList = commentDao.getComment((long) 19);
+        System.out.println(commentVoList);
     }
 
 }

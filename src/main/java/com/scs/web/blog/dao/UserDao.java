@@ -81,4 +81,6 @@ public interface UserDao {
      */
     List<User> selectByKeywords(String keywords) throws SQLException;
 
+    int update(long id) throws SQLException;
+
 }

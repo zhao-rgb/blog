@@ -8,10 +8,12 @@ import com.scs.web.blog.factory.DaoFactory;
 import com.scs.web.blog.service.CommentService;
 import com.scs.web.blog.util.Message;
 import com.scs.web.blog.util.Result;
+import com.scs.web.blog.util.ResultCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,13 +61,18 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Result getComment(long id) {
-        CommentVo commentVo = null;
+    public Result getComment(long articleId) {
+        List<CommentVo> commentVoList = new ArrayList<>();
         try {
-            commentVo = commentDao.getComment(id);
+            commentVoList = commentDao.getComment(articleId);
         } catch (SQLException e) {
             logger.error("异常");
         }
-        return Result.success(commentVo);
+        if(commentVoList !=null){
+            return Result.success(commentVoList);
+        }else {
+            return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
+        }
+
     }
 }

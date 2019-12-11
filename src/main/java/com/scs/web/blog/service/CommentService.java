@@ -30,8 +30,8 @@ public interface CommentService {
 
     /**
      *
-     * @param id
+     * @param articleId
      * @return
      */
-    Result getComment(long id);
+    Result getComment(long articleId);
 }

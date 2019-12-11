@@ -32,9 +32,9 @@ public interface CommentDao {
 
     /**
      *
-     * @param id
+     * @param articleId
      * @return
      * @throws SQLException
      */
-    CommentVo getComment(long id) throws SQLException;
+    List<CommentVo> getComment(long articleId) throws SQLException;
 }

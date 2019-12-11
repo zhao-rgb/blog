@@ -185,4 +185,13 @@ public class UserDaoImpl implements UserDao {
         return userList;
     }
 
+
+    @Override
+    public int update(long id) throws SQLException {
+//        Connection connection = DbUtil.getConnection();
+//        String sql = "UPDATE t_user SET nickname = ? , gender = ? WHERE id = ?";
+//        PreparedStatement pst = connection.prepareStatement(sql);
+//        pst.setString(1,);
+        return 0;
+    }
 }

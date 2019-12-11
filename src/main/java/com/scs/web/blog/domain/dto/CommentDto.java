@@ -13,8 +13,9 @@ import java.time.LocalDateTime;
  * @Version 1.0
  **/
 @Data
-public class CommentDto implements Serializable {
-    private String nickname;
+public class CommentDto {
+    private Long userId;
+    private Long articleId;
     private String content;
     private LocalDateTime createTime;
     private String code;

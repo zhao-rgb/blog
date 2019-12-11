@@ -106,6 +106,7 @@ public class CommentController extends HttpServlet {
         Map<String, Object> map = null;
         map= commentService.newcomment(commentDto);
 
+        System.out.println(map);
 
         String msg = (String) map.get("msg");
         ResponseObject ro=null;
