@@ -81,6 +81,11 @@ public interface UserDao {
      */
     List<User> selectByKeywords(String keywords) throws SQLException;
 
-    int update(long id) throws SQLException;
-
+    /**
+     *
+     * @param user
+     * @return
+     * @throws SQLException
+     */
+    int update(User user) throws SQLException;
 }

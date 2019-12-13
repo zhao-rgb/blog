@@ -9,6 +9,7 @@ import org.junit.runners.Suite;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -39,5 +40,18 @@ public class UserServiceTest {
     public void getUser() {
         Result rs = userService.getUser(1);
         System.out.println(rs.getData());
+    }
+
+    @Test
+    public void updateUser() throws SQLException {
+        User user = new User();
+        user.setNickname("张三");
+        user.setGender("男");
+        user.setBirthday(LocalDate.now());
+        user.setAddress("中古江苏省南京市");
+        user.setIntroduction("开开心心过大年");
+        user.setHomepage("https://blog.csdn.net/qq_38225558/article/details/82842426");
+        user.setId(84L);
+        userService.updateUser(user);
     }
 }

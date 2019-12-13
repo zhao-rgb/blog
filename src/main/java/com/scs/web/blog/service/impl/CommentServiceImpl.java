@@ -75,4 +75,20 @@ public class CommentServiceImpl implements CommentService {
         }
 
     }
+
+
+    @Override
+    public Result deleteComment(long id) {
+        int n =0;
+        try {
+            n = commentDao.delete(id);
+        } catch (SQLException e) {
+           logger.error("删除出现异常");
+        }
+       if(n !=0){
+           return  Result.success(n);
+       }else {
+           return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
+       }
+    }
 }

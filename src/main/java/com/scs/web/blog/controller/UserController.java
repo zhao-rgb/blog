@@ -1,7 +1,11 @@
 package com.scs.web.blog.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.scs.web.blog.domain.dto.UserDto;
 import com.scs.web.blog.entity.User;
 import com.scs.web.blog.factory.ServiceFactory;
@@ -12,6 +16,7 @@ import com.scs.web.blog.util.ResponseObject;
 import com.scs.web.blog.util.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,6 +26,8 @@ import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +39,7 @@ import java.util.Map;
  * @Date 2019/11/9
  * @Version 1.0
  **/
-@WebServlet(urlPatterns = {"/api/sign-in","/api/register","/api/detail/*","/api/user","/api/user/*"})
+@WebServlet(urlPatterns = {"/api/sign-in", "/api/register", "/api/detail/*", "/api/user", "/api/user/*", "/api/user/update/*"})
 public class UserController extends HttpServlet {
     private static Logger logger = LoggerFactory.getLogger(UserController.class);
     private UserService userService = ServiceFactory.getUserServiceInstance();
@@ -57,7 +64,7 @@ public class UserController extends HttpServlet {
                 getHotUser(req, resp);
             }
         } else if (uri.contains("/api/detail/")) {
-                getUser(req, resp);
+            getUser(req, resp);
         }
     }
 
@@ -68,7 +75,6 @@ public class UserController extends HttpServlet {
         out.print(gson.toJson(result));
         out.close();
     }
-
 
     private void getUsersByPage(HttpServletResponse resp, int page, int count) throws IOException {
         Gson gson = new GsonBuilder().create();
@@ -85,7 +91,6 @@ public class UserController extends HttpServlet {
         out.print(gson.toJson(result));
         out.close();
     }
-
 
     private void getUser(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 //        ResponseObject ro = null;
@@ -108,7 +113,6 @@ public class UserController extends HttpServlet {
         out.print(gson.toJson(result));
         out.close();
     }
-
 
 
     @Override
@@ -162,11 +166,42 @@ public class UserController extends HttpServlet {
             default:
                 ro = ResponseObject.success(200, msg);
         }
-
-
         out.print(gson.toJson(ro));
         out.close();
     }
+
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String uri = req.getRequestURI().trim();
+        System.out.println(uri);
+        if (uri.contains("/api/user/update"))
+            update(req, resp);
+    }
+
+    private void update(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        req.setCharacterEncoding("UTF-8");
+        BufferedReader reader = req.getReader();
+        StringBuilder stringBuilder = new StringBuilder();
+        String line = null;
+        while ((line = reader.readLine()) != null) {
+            stringBuilder.append(line);
+        }
+//        System.out.println(stringBuilder.toString());
+        String jsonStr = stringBuilder.toString();
+        JSONObject jsonObject = JSONObject.parseObject(jsonStr);
+        User user = JSONObject.parseObject(jsonStr,User.class);
+        String dateString = jsonObject.get("birthday").toString();
+        LocalDate localDate =  LocalDate.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        user.setBirthday(localDate);
+        Result result = userService.updateUser(user);
+        System.out.println(result);
+        PrintWriter out = resp.getWriter();
+        out.print(JSONObject.parseObject(JSON.toJSONString(user)));
+        out.close();
+    }
+
+
     @Override
     public void init() throws ServletException {
         logger.info("UserController初始化");

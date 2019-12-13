@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,11 +72,11 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User findUserByMobile(String mobile) throws SQLException{
+    public User findUserByMobile(String mobile) throws SQLException {
         Connection connection = DbUtil.getConnection();
         String sql = "SELECT * FROM t_user WHERE mobile = ? ";
         PreparedStatement pst = connection.prepareStatement(sql);
-        pst.setString(1,mobile);
+        pst.setString(1, mobile);
         ResultSet rs = pst.executeQuery();
         User user = convertUser(rs).get(0);
         DbUtil.close(connection, pst, rs);
@@ -145,7 +146,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-     public List<User> selectByKeywords(String keywords) throws SQLException {
+    public List<User> selectByKeywords(String keywords) throws SQLException {
         Connection connection = DbUtil.getConnection();
         String sql = "SELECT * FROM t_user " +
                 "WHERE nickname LIKE ?  OR introduction LIKE ? ";
@@ -158,7 +159,7 @@ public class UserDaoImpl implements UserDao {
         return userList;
     }
 
-    public  static List<User> convertUser(ResultSet rs) {
+    public static List<User> convertUser(ResultSet rs) {
         List<User> userList = new ArrayList<>(50);
         try {
             while (rs.next()) {
@@ -187,11 +188,19 @@ public class UserDaoImpl implements UserDao {
 
 
     @Override
-    public int update(long id) throws SQLException {
-//        Connection connection = DbUtil.getConnection();
-//        String sql = "UPDATE t_user SET nickname = ? , gender = ? WHERE id = ?";
-//        PreparedStatement pst = connection.prepareStatement(sql);
-//        pst.setString(1,);
-        return 0;
+    public int update(User user) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql = "UPDATE t_user SET nickname = ?, gender = ?, birthday = ?, address = ?, introduction = ?, homepage = ? WHERE id = ?";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setString(1, user.getNickname());
+        pstmt.setString(2, user.getGender());
+        pstmt.setObject(3, user.getBirthday());
+        pstmt.setString(4, user.getAddress());
+        pstmt.setString(5, user.getIntroduction());
+        pstmt.setString(6, user.getHomepage());
+        pstmt.setLong(7, user.getId());
+        int i =pstmt.executeUpdate();
+        System.out.println(i);
+        return i;
     }
 }

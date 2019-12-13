@@ -2,6 +2,7 @@ package com.scs.web.blog.service;
 
 
 import com.scs.web.blog.domain.dto.UserDto;
+import com.scs.web.blog.entity.User;
 import com.scs.web.blog.util.Result;
 
 import java.util.List;
@@ -55,4 +56,12 @@ public interface UserService {
      * @return Result
      */
     Result selectByKeywords(String keywords);
+
+    /**
+     * 修改用户信息
+     * @param user
+     * @return
+     */
+    Result updateUser(User user);
+
 }

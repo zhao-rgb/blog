@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +33,7 @@ import java.util.Map;
  * @Date 2019/12/9
  * @Version 1.0
  **/
-@WebServlet(urlPatterns = {"/api/comment","/api/comment/*","/api/comments"})
+@WebServlet(urlPatterns = {"/api/comment","/api/comment/*","/api/comments","/api/comments/delete/*"})
 public class CommentController extends HttpServlet {
     private static Logger logger = LoggerFactory.getLogger(CommentController.class);
     private CommentDao commentDao = DaoFactory.getCommentDaoInstance();
@@ -123,6 +124,25 @@ public class CommentController extends HttpServlet {
         //通过response对象返回Json信息
         PrintWriter out = resp.getWriter();
         out.print(gson.toJson(ro));
+        out.close();
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String uri = req.getRequestURI().trim();
+        System.out.println(uri);
+        if(uri.contains("/api/comments/delete"))
+            deleteComment(req, resp);
+    }
+
+    private void deleteComment(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String info = req.getPathInfo().trim();
+        String id = info.substring(info.indexOf("/") + 1);
+//        String id = req.getParameter("id");
+        Result result = commentService.deleteComment(Long.parseLong(id));
+        Gson gson = new GsonBuilder().create();
+        PrintWriter out = resp.getWriter();
+        out.print(gson.toJson(result));
         out.close();
     }
 }

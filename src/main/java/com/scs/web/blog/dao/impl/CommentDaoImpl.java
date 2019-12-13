@@ -91,4 +91,14 @@ public class CommentDaoImpl implements CommentDao {
         return commentVoList;
     }
 
+    @Override
+    public int delete(long id) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql = "DELETE FROM t_comment WHERE id = ? ";
+        PreparedStatement pst = connection.prepareStatement(sql);
+        pst.setLong(1,id);
+        int i = pst.executeUpdate();
+        System.out.println("行数为:" + i);
+        return i;
+    }
 }

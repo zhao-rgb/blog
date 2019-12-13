@@ -34,4 +34,11 @@ public interface CommentService {
      * @return
      */
     Result getComment(long articleId);
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    Result deleteComment(long id);
 }

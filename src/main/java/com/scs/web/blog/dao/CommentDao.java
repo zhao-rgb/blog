@@ -37,4 +37,12 @@ public interface CommentDao {
      * @throws SQLException
      */
     List<CommentVo> getComment(long articleId) throws SQLException;
+
+    /**
+     *
+     * @param id
+     * @return
+     * @throws SQLException
+     */
+    int delete(long id) throws SQLException;
 }
