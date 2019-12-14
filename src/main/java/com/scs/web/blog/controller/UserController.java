@@ -187,7 +187,7 @@ public class UserController extends HttpServlet {
         while ((line = reader.readLine()) != null) {
             stringBuilder.append(line);
         }
-//        System.out.println(stringBuilder.toString());
+        System.out.println(stringBuilder.toString());
         String jsonStr = stringBuilder.toString();
         JSONObject jsonObject = JSONObject.parseObject(jsonStr);
         User user = JSONObject.parseObject(jsonStr,User.class);

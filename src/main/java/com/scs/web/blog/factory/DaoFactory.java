@@ -1,13 +1,7 @@
 package com.scs.web.blog.factory;
 
-import com.scs.web.blog.dao.ArticleDao;
-import com.scs.web.blog.dao.CommentDao;
-import com.scs.web.blog.dao.TopicDao;
-import com.scs.web.blog.dao.UserDao;
-import com.scs.web.blog.dao.impl.ArticleDaoImpl;
-import com.scs.web.blog.dao.impl.CommentDaoImpl;
-import com.scs.web.blog.dao.impl.TopicDaoImpl;
-import com.scs.web.blog.dao.impl.UserDaoImpl;
+import com.scs.web.blog.dao.*;
+import com.scs.web.blog.dao.impl.*;
 
 /**
  * @author zhao
@@ -28,5 +22,8 @@ public class DaoFactory {
     }
     public static CommentDao getCommentDaoInstance(){
         return new CommentDaoImpl();
+    }
+    public  static LikeDao getLikeDaoInstance(){
+        return new LikeDaoImpl();
     }
 }
