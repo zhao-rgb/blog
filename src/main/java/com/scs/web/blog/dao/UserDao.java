@@ -4,6 +4,8 @@ import com.scs.web.blog.domain.dto.UserDto;
 import com.scs.web.blog.domain.vo.UserVo;
 import com.scs.web.blog.entity.Article;
 import com.scs.web.blog.entity.User;
+import com.scs.web.blog.util.Result;
+
 import java.sql.SQLException;
 import java.util.List;
 
@@ -88,4 +90,22 @@ public interface UserDao {
      * @throws SQLException
      */
     int update(User user) throws SQLException;
+
+
+    /**
+     *
+     * @param id
+     * @return
+     * @throws SQLException
+     */
+    long selectarticle(long id) throws SQLException;
+
+
+    /**
+     *
+     * @param id
+     * @return
+     * @throws SQLException
+     */
+    int updatearticle(long id) throws SQLException;
 }

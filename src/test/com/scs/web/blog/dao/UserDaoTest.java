@@ -100,5 +100,11 @@ public class UserDaoTest {
             System.out.println(user);
         }
     }
+
+    @Test
+    public void updatearticle() throws SQLException{
+        int result = userDao.updatearticle(1l);
+        System.out.println(result);
+    }
 }
 

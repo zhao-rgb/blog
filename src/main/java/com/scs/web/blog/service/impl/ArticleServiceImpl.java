@@ -1,12 +1,15 @@
 package com.scs.web.blog.service.impl;
 
 import com.scs.web.blog.dao.ArticleDao;
+import com.scs.web.blog.dao.UserDao;
 import com.scs.web.blog.domain.vo.ArticleVo;
 import com.scs.web.blog.entity.Article;
+import com.scs.web.blog.entity.User;
 import com.scs.web.blog.factory.DaoFactory;
 import com.scs.web.blog.service.ArticleService;
 import com.scs.web.blog.util.Message;
 import com.scs.web.blog.util.ResultCode;
+import org.jsoup.select.Evaluator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.scs.web.blog.util.Result;
@@ -26,6 +29,7 @@ import java.util.Map;
 public class ArticleServiceImpl implements ArticleService {
     private ArticleDao articleDao = DaoFactory.getArticleDaoInstance();
     private static Logger logger = LoggerFactory.getLogger(ArticleServiceImpl.class);
+    private UserDao userDao = DaoFactory.getUserDaoInstance();
 
 
 
@@ -98,12 +102,16 @@ public class ArticleServiceImpl implements ArticleService {
     public Map<String, Object> newarticle(Article article) {
         Map<String , Object> map = new HashMap<>();
         int i = 0;
+        int a =0;
         try {
             i = articleDao.insert(article);
+
+            a = userDao.updatearticle(article.getUserId());
         } catch (SQLException e) {
             e.printStackTrace();
         }
         System.out.println("i的值：" + i);
+        System.out.println("a的值：" + a);
         if(i == 1){
             map.put("msg", Message.REGISTER_SUCCESS);
             map.put("data",article);

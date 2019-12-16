@@ -9,6 +9,8 @@ import com.scs.web.blog.entity.User;
 import com.scs.web.blog.factory.DaoFactory;
 import com.scs.web.blog.util.BeanHandler;
 import com.scs.web.blog.util.DbUtil;
+import com.scs.web.blog.util.ResponseObject;
+import com.scs.web.blog.util.Result;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -210,5 +212,32 @@ public class UserDaoImpl implements UserDao {
         int i =pstmt.executeUpdate();
         System.out.println(i);
         return i;
+    }
+
+    @Override
+    public long selectarticle(long id) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql = "SELECT articles FROM t_user WHERE id = ?";
+        PreparedStatement pst = connection.prepareStatement(sql);
+        pst.setLong(1,id);
+        ResultSet rs = pst.executeQuery();
+        long articles = 0;
+        while (rs.next()){
+            articles = rs.getShort("articles");
+        }
+        return articles;
+    }
+
+    @Override
+    public int updatearticle(long id) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql = "UPDATE t_user SET articles = (SELECT COUNT(user_id)FROM t_article WHERE user_id =?) WHERE id =?";
+        PreparedStatement pst = connection.prepareStatement(sql);
+//        pst.setLong(1,selectarticle(id) +1);
+        pst.setLong(1,id);
+        pst.setLong(2,id);
+        int result = pst.executeUpdate();
+        System.out.println(result);
+        return  result;
     }
 }
