@@ -51,7 +51,6 @@ public class CommentDaoImpl implements CommentDao {
             comment.setId(rs.getLong("id"));
             comment.setUserId(rs.getLong("user_id"));
             comment.setArticleId(rs.getLong("article_id"));
-            comment.setNickname(rs.getString("nickname"));
             comment.setContent(rs.getString("content"));
             Timestamp timestamp = rs.getTimestamp("create_time");
             comment.setCreateTime(timestamp.toLocalDateTime());

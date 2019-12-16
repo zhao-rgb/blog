@@ -66,7 +66,7 @@ public class ArticleDaoImpl implements ArticleDao {
                 "FROM t_article a\n" +
                 "LEFT JOIN t_user b\n" +
                 "ON a.user_id = b.id\n" +
-                "ORDER BY a.comments DESC LIMIT 16";
+                "ORDER BY a.comments DESC LIMIT 10";
         PreparedStatement pstmt = connection.prepareStatement(sql);
         ResultSet rs = pstmt.executeQuery();
         while (rs.next()) {
@@ -198,7 +198,7 @@ public class ArticleDaoImpl implements ArticleDao {
                 "ON a.topic_id = b.id " +
                 "LEFT JOIN t_user c " +
                 "ON a.user_id = c.id " +
-                "WHERE a.topic_id = ? ";
+                "WHERE a.user_id = ? ";
         PreparedStatement pst = connection.prepareStatement(sql);
         pst.setLong(1, userId);
         ResultSet rs = pst.executeQuery();
@@ -253,6 +253,18 @@ public class ArticleDaoImpl implements ArticleDao {
         pst.setString(10,article.getText());
         int i =pst.executeUpdate();
         System.out.println("行数为" +1);
+        return i;
+    }
+
+
+    @Override
+    public int delete(long id) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql = "DELETE FROM t_article WHERE id = ?";
+        PreparedStatement pst = connection.prepareStatement(sql);
+        pst.setLong(1,id);
+        int i = pst.executeUpdate();
+        System.out.println("行数为" + i);
         return i;
     }
 }

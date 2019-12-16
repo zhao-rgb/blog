@@ -30,7 +30,7 @@ import java.util.Map;
  * @Date 2019/11/15
  * @Version 1.0
  **/
-@WebServlet(urlPatterns = {"/api/article","/api/article/*", "/api/article/detail/*"})
+@WebServlet(urlPatterns = {"/api/article","/api/article/*", "/api/article/detail/*","/api/article/delete/*"})
 public class ArticleController extends HttpServlet {
     private static Logger logger = LoggerFactory.getLogger(ArticleController.class);
     private ArticleService articleService = ServiceFactory.getArticleServiceInstance();
@@ -121,5 +121,23 @@ public class ArticleController extends HttpServlet {
         PrintWriter out = resp.getWriter();
         out.print(gson.toJson(ro));
         out.close();
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String uri = req.getRequestURI().trim();
+        System.out.println(uri);
+        if(uri.contains("/api/article/delete"))
+            deleteArticle(req, resp);
+    }
+    private void deleteArticle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+        String info = req.getPathInfo().trim();
+        String id = info.substring(info.indexOf("/") + 1);
+        Result result = articleService.deleteArticle(Long.parseLong(id));
+        Gson gson = new GsonBuilder().create();
+        PrintWriter out = resp.getWriter();
+        out.print(gson.toJson(result));
+        out.close();
+
     }
 }

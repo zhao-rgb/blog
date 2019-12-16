@@ -114,5 +114,18 @@ public class ArticleServiceImpl implements ArticleService {
         return map;
     }
 
-
+    @Override
+    public Result deleteArticle(long id) {
+        int n = 0;
+        try {
+            n = articleDao.delete(id);
+        } catch (SQLException e) {
+            logger.error("删除异常");
+        }
+        if( n != 0){
+            return Result.success(n);
+        }else {
+            return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
+        }
+    }
 }

@@ -2,9 +2,11 @@ package com.scs.web.blog.dao.impl;
 
 import com.scs.web.blog.dao.UserDao;
 import com.scs.web.blog.domain.dto.UserDto;
+import com.scs.web.blog.domain.vo.ArticleVo;
 import com.scs.web.blog.domain.vo.UserVo;
 import com.scs.web.blog.entity.Article;
 import com.scs.web.blog.entity.User;
+import com.scs.web.blog.factory.DaoFactory;
 import com.scs.web.blog.util.BeanHandler;
 import com.scs.web.blog.util.DbUtil;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -86,7 +88,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> selectHotUsers() throws SQLException {
         Connection connection = DbUtil.getConnection();
-        String sql = "SELECT * FROM t_user ORDER BY fans DESC LIMIT 10 ";
+        String sql = "SELECT * FROM t_user ORDER BY fans DESC LIMIT 8 ";
         PreparedStatement pst = connection.prepareStatement(sql);
         ResultSet rs = pst.executeQuery();
 //        DbUtil.close(connection, pst, rs);
@@ -114,9 +116,15 @@ public class UserDaoImpl implements UserDao {
         PreparedStatement pst = connection.prepareStatement(sql);
         pst.setLong(1, id);
         ResultSet rs = pst.executeQuery();
+        List<User> users= convertUser(rs);
+        User user = users.get(0);
         UserVo userVo = new UserVo();
-        User user = convertUser(rs).get(0);
         userVo.setUser(user);
+        System.out.println(user.getId());
+        List<ArticleVo> articleVoList = DaoFactory.getArticleDaoInstance().selectByUserId(user.getId());
+        if (articleVoList != null) {
+            userVo.setArticleList(articleVoList);
+        }
         DbUtil.close(connection, pst, rs);
         return userVo;
     }
@@ -159,7 +167,7 @@ public class UserDaoImpl implements UserDao {
         return userList;
     }
 
-    public static List<User> convertUser(ResultSet rs) {
+    private static List<User> convertUser(ResultSet rs) {
         List<User> userList = new ArrayList<>(50);
         try {
             while (rs.next()) {

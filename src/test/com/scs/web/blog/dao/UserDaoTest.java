@@ -1,6 +1,7 @@
 package com.scs.web.blog.dao;
 
 import com.scs.web.blog.domain.dto.UserDto;
+import com.scs.web.blog.domain.vo.UserVo;
 import com.scs.web.blog.entity.Article;
 import com.scs.web.blog.entity.User;
 import com.scs.web.blog.factory.DaoFactory;
@@ -89,6 +90,15 @@ public class UserDaoTest {
     public void selectByPage() throws SQLException {
         List<User> userList = userDao.selectByPage(1, 10);
         userList.forEach(System.out::println);
+    }
+
+
+    @Test
+    public void getUser()throws SQLException {
+        UserVo user = userDao.getUser(1L);
+        if (user != null) {
+            System.out.println(user);
+        }
     }
 }
 

@@ -22,12 +22,6 @@ import java.util.List;
 @Data
 public class UserVo {
     private User user;
-    private List<Article> articles;
-    private List<SimpleUser> simpleUsers;
-//    private List<Topic> topicList;
-//    private List<User> fansList;
-
     private List<ArticleVo> articleList;
     private List<Topic> topicList;
-    private List<User> fansList;
 }

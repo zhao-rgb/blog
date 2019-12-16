@@ -117,19 +117,19 @@ public class UserServiceImpl implements UserService {
     public Result getUser(long id) {
         UserVo userVo = null;
 
-        try {
-            userVo = userDao.getUser(id);
-        } catch (SQLException e) {
-            logger.error("根据id获取用户详情出现异常");
-        }
-        if (userVo != null) {
             try {
-                List<ArticleVo> articleVoList =articleDao.selectByUserId(id);
-                userVo.setArticleList(articleVoList);
-                return Result.success(userVo);
+                userVo = userDao.getUser(id);
             } catch (SQLException e) {
-                logger.error("根据用户id获取文章列表数据出现异常");
+                logger.error("根据id获取用户详情出现异常");
             }
+            if (userVo != null) {
+                try {
+                    List<ArticleVo> articleVoList =articleDao.selectByUserId(id);
+                    userVo.setArticleList(articleVoList);
+                    return Result.success(userVo);
+                } catch (SQLException e) {
+                    logger.error("根据用户id获取文章列表数据出现异常");
+                }
         }
         return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
     }

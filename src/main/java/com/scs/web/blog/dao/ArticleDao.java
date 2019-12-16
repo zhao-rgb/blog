@@ -88,4 +88,12 @@ public interface ArticleDao {
    * @throws SQLException
    */
   int insert(Article article) throws  SQLException;
+
+  /**
+   *
+   * @param id
+   * @return
+   * @throws SQLException
+   */
+  int delete(long id) throws  SQLException;
 }

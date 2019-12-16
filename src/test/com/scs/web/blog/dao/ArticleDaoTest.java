@@ -54,4 +54,10 @@ public class ArticleDaoTest {
             logger.info("成功");
         }
     }
+
+    @Test
+    public void getArticlesByUserId()throws SQLException {
+        List<ArticleVo> articleVoList = articleDao.selectByUserId(1L);
+        System.out.println(articleVoList.size());
+    }
 }

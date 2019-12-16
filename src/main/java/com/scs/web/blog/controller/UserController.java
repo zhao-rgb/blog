@@ -189,11 +189,13 @@ public class UserController extends HttpServlet {
         }
         System.out.println(stringBuilder.toString());
         String jsonStr = stringBuilder.toString();
+
         JSONObject jsonObject = JSONObject.parseObject(jsonStr);
         User user = JSONObject.parseObject(jsonStr,User.class);
         String dateString = jsonObject.get("birthday").toString();
         LocalDate localDate =  LocalDate.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         user.setBirthday(localDate);
+
         Result result = userService.updateUser(user);
         System.out.println(result);
         PrintWriter out = resp.getWriter();

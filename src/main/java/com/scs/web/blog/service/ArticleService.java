@@ -56,4 +56,11 @@ public interface ArticleService {
      * @return
      */
     Map<String, Object> newarticle(Article article);
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    Result deleteArticle(long id);
 }

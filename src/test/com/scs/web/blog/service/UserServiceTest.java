@@ -38,7 +38,7 @@ public class UserServiceTest {
 
     @Test
     public void getUser() {
-        Result rs = userService.getUser(1);
+        Result rs = userService.getUser(1L);
         System.out.println(rs.getData());
     }
 
