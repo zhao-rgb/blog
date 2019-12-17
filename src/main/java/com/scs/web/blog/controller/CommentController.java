@@ -100,15 +100,11 @@ public class CommentController extends HttpServlet {
         //将接受到的客户端JSON字符串转成User对象
         Gson gson = new GsonBuilder().create();
         CommentDto commentDto =gson.fromJson(stringBuilder.toString(),CommentDto.class);
-
         System.out.println(commentDto);
-
         //插入数据库，并返回该行主键
         Map<String, Object> map = null;
         map= commentService.newcomment(commentDto);
-
         System.out.println(map);
-
         String msg = (String) map.get("msg");
         ResponseObject ro=null;
         switch (msg){

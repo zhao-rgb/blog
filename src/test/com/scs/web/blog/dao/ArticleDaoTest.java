@@ -24,11 +24,10 @@ public class ArticleDaoTest {
             }
         } catch (SQLException e) {
             logger.error("异常");
-
-
-
         }
     }
+
+
 
     @Test
     public void selectByKeywords() throws SQLException{
@@ -59,5 +58,28 @@ public class ArticleDaoTest {
     public void getArticlesByUserId()throws SQLException {
         List<ArticleVo> articleVoList = articleDao.selectByUserId(1L);
         System.out.println(articleVoList.size());
+    }
+
+    @Test
+    public void getArticle()throws SQLException {
+        Article article = articleDao.getArticle(1);
+        if (article != null) {
+            System.out.println(article);
+        }
+    }
+
+    @Test
+    public void selectAll()throws SQLException {
+        List<Article> articleList = articleDao.selectAll();
+        if (articleList.size()>0) {
+            System.out.println(articleList.size());
+        }
+    }
+
+    @Test
+    public void update() throws SQLException {
+        Article article = articleDao.getArticle(1);
+        article.setLikes(article.getLikes()-1);
+        articleDao.update(article);
     }
 }

@@ -105,7 +105,6 @@ public class ArticleServiceImpl implements ArticleService {
         int a =0;
         try {
             i = articleDao.insert(article);
-
             a = userDao.updatearticle(article.getUserId());
         } catch (SQLException e) {
             e.printStackTrace();

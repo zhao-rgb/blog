@@ -12,12 +12,18 @@ import com.scs.web.blog.util.Result;
  **/
 public interface LikeService {
 
-
-
     /**
      * 喜欢数加一
-     * @param like
+     * @param
      * @return
      */
-    Result addLike(Like like);
+    Result addLike(long userId, long articleId);
+
+    /**
+     * 取消喜欢
+     * @param userId
+     * @param articleId
+     * @return
+     */
+    Result lessenLike(long userId, long articleId);
 }

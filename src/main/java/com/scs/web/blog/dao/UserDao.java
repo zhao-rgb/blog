@@ -92,13 +92,13 @@ public interface UserDao {
     int update(User user) throws SQLException;
 
 
-    /**
-     *
-     * @param id
-     * @return
-     * @throws SQLException
-     */
-    long selectarticle(long id) throws SQLException;
+//    /**
+//     *
+//     * @param id
+//     * @return
+//     * @throws SQLException
+//     */
+//    long selectarticle(long id) throws SQLException;
 
 
     /**

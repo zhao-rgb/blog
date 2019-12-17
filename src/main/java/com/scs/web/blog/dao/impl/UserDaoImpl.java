@@ -214,19 +214,19 @@ public class UserDaoImpl implements UserDao {
         return i;
     }
 
-    @Override
-    public long selectarticle(long id) throws SQLException {
-        Connection connection = DbUtil.getConnection();
-        String sql = "SELECT articles FROM t_user WHERE id = ?";
-        PreparedStatement pst = connection.prepareStatement(sql);
-        pst.setLong(1,id);
-        ResultSet rs = pst.executeQuery();
-        long articles = 0;
-        while (rs.next()){
-            articles = rs.getShort("articles");
-        }
-        return articles;
-    }
+//    @Override
+//    public long selectarticle(long id) throws SQLException {
+//        Connection connection = DbUtil.getConnection();
+//        String sql = "SELECT articles FROM t_user WHERE id = ?";
+//        PreparedStatement pst = connection.prepareStatement(sql);
+//        pst.setLong(1,id);
+//        ResultSet rs = pst.executeQuery();
+//        long articles = 0;
+//        while (rs.next()){
+//            articles = rs.getShort("articles");
+//        }
+//        return articles;
+//    }
 
     @Override
     public int updatearticle(long id) throws SQLException {

@@ -20,15 +20,14 @@ import java.sql.SQLException;
 public class LikeDaoImpl implements LikeDao {
 
     @Override
-    public boolean insertLike(Like like) throws SQLException {
+    public boolean insertLike(long useId, long articleId) throws SQLException {
         Connection connection = DbUtil.getConnection();
         String sql = "INSERT INTO t_like (user_id, article_id) VALUES (?, ?)";
-        PreparedStatement pstmt = connection.prepareStatement(sql);
-        pstmt.setLong(1, like.getUserId());
-        pstmt.setLong(2, like.getArticleId());
-        int n = pstmt.executeUpdate();
-        DbUtil.close(connection, pstmt);
-        if (n == 1){
+        PreparedStatement pst = connection.prepareStatement(sql);
+        pst.setLong(1, useId);
+        pst.setLong(2, articleId);
+        int result = pst.executeUpdate();
+        if (result > 0){
             return true;
         } else {
             return false;
@@ -36,31 +35,18 @@ public class LikeDaoImpl implements LikeDao {
     }
 
     @Override
-    public long selectLikes(long articleId) throws SQLException {
+    public boolean deleteLike(long useId, long articleId) throws SQLException {
         Connection connection = DbUtil.getConnection();
-        String sql = "SELECT likes FROM t_article WHERE id = ?";
-        PreparedStatement pst = connection.prepareStatement(sql);
-        pst.setLong(1,articleId);
-        ResultSet rs = pst.executeQuery();
-        long likes = 0;
-        while(rs.next()){
-            likes = rs.getLong("likes");
-        }
-        return likes;
-    }
-
-    @Override
-    public boolean addLikes(long articleId) throws SQLException {
-        Connection connection = DbUtil.getConnection();
-        String sql = "UPDATE t_article SET likes = ? WHERE id =?";
-        PreparedStatement pst = connection.prepareStatement(sql);
-        pst.setLong(1,selectLikes(articleId) +1);
-        pst.setLong(2,articleId);
-        int result = pst.executeUpdate();
-        if(result == 1){
+        String sql = "DELETE FROM t_like WHERE user_id=? AND article_id=?";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setLong(1, useId);
+        pstmt.setLong(2, articleId);
+        int result = pstmt.executeUpdate();
+        if (result > 0) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
+
 }

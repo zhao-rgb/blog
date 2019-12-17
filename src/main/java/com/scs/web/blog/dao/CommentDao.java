@@ -16,7 +16,7 @@ import java.util.List;
  **/
 public interface CommentDao {
     /**
-     * 评论
+     * 写评论
      * @param commentDto
      * @return
      * @throws SQLException
@@ -24,14 +24,14 @@ public interface CommentDao {
     int insert(CommentDto commentDto) throws SQLException;
 
     /**
-     *
+     *查看所有评论
      * @return
      * @throws SQLException
      */
     List<Comment> selectAll() throws SQLException;
 
     /**
-     *
+     *得到评论的东西
      * @param articleId
      * @return
      * @throws SQLException
@@ -39,10 +39,18 @@ public interface CommentDao {
     List<CommentVo> getComment(long articleId) throws SQLException;
 
     /**
-     *
+     *删除评论
      * @param id
      * @return
      * @throws SQLException
      */
     int delete(long id) throws SQLException;
+
+    /**
+     * 更新评论数
+     * @param id
+     * @return
+     * @throws SQLException
+     */
+    int updatecommnet(long id) throws SQLException;
 }

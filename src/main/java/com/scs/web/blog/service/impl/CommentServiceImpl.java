@@ -3,6 +3,7 @@ package com.scs.web.blog.service.impl;
 import com.scs.web.blog.dao.CommentDao;
 import com.scs.web.blog.domain.dto.CommentDto;
 import com.scs.web.blog.domain.vo.CommentVo;
+import com.scs.web.blog.entity.Article;
 import com.scs.web.blog.entity.Comment;
 import com.scs.web.blog.factory.DaoFactory;
 import com.scs.web.blog.service.CommentService;
@@ -32,12 +33,15 @@ public class CommentServiceImpl implements CommentService {
     public Map<String, Object> newcomment(CommentDto commentDto) {
         Map<String ,Object> map = new HashMap<>();
         int i = 0;
+        int a = 0;
         try{
             i = commentDao.insert(commentDto);
+            a = commentDao.updatecommnet(commentDto.getArticleId());
         }catch (SQLException e){
             e.printStackTrace();
         }
         System.out.println("i的值为：" + i);
+        System.out.println("a的值为：" + a);
         if(i == 1){
             map.put("msg", Message.REGISTER_SUCCESS);
             map.put("data",commentDto);
@@ -83,12 +87,12 @@ public class CommentServiceImpl implements CommentService {
         try {
             n = commentDao.delete(id);
         } catch (SQLException e) {
-           logger.error("删除出现异常");
+            logger.error("删除出现异常");
         }
-       if(n !=0){
-           return  Result.success(n);
-       }else {
-           return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
-       }
+        if(n !=0){
+            return  Result.success(n);
+        }else {
+            return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
+        }
     }
 }

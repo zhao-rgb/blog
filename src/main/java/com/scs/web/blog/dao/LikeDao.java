@@ -14,24 +14,20 @@ import java.sql.SQLException;
 public interface LikeDao {
     /**
      * 写入一条喜欢
-     * @param like
-     * @return
-     * @throws SQLException
-     */
-    boolean insertLike(Like like) throws SQLException;
-    /**
-     * 查看文章数
+     * @param useId
      * @param articleId
      * @return
      * @throws SQLException
      */
-    long selectLikes(long articleId) throws SQLException;
+    boolean insertLike(long useId, long articleId) throws SQLException;
 
     /**
-     * 点赞文章
+     * 删除一条喜欢
+     * @param useId
      * @param articleId
      * @return
      * @throws SQLException
      */
-    boolean addLikes(long articleId) throws SQLException;
+    boolean deleteLike(long useId, long articleId) throws  SQLException;
+
 }

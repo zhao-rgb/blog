@@ -33,9 +33,11 @@ public enum  ResultCode {
     SYSTEM_INNER_ERROR(40001, "系统繁忙，请稍后重试"),
 
     /* 数据错误：50001-599999 */
+    DATABASE_ERROR(50000,"数据库操作异常"),
     RESULT_CODE_DATA_NONE(50001, "数据未找到"),
     DATA_IS_WRONG(50002, "数据有误"),
     DATA_ALREADY_EXISTED(50003, "数据已存在"),
+    LIKES_NOT_FOUND(50004, "点赞记录不存在"),
 
     /* 接口错误：60001-69999 */
     INTERFACE_INNER_INVOKE_ERROR(60001, "内部系统接口调用异常"),

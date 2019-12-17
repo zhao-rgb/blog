@@ -96,4 +96,22 @@ public interface ArticleDao {
    * @throws SQLException
    */
   int delete(long id) throws  SQLException;
+
+  /**
+   *
+   * @param id
+   * @return
+   * @throws SQLException
+   */
+  Article getArticle(long id)throws SQLException;
+
+  /**
+   *
+   * @param article
+   * @return
+   * @throws SQLException
+   */
+  int update(Article article) throws SQLException;
+
+  int updatee(Article article) throws  SQLException;
 }

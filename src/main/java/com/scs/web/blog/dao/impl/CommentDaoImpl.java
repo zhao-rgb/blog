@@ -100,4 +100,16 @@ public class CommentDaoImpl implements CommentDao {
         System.out.println("行数为:" + i);
         return i;
     }
+
+    @Override
+    public int updatecommnet(long id) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql = "UPDATE t_article SET comments = (SELECT COUNT(article_id) FROM t_comment WHERE article_id =?) WHERE id =? ";
+        PreparedStatement pst = connection.prepareStatement(sql);
+        pst.setLong(1,id);
+        pst.setLong(2,id);
+        int result = pst.executeUpdate();
+        System.out.println(result);
+        return result;
+    }
 }

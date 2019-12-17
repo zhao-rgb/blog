@@ -37,8 +37,15 @@ public class CommentDaoTest {
         System.out.println(commentVoList);
     }
 
+//    @Test
+//    public void delete() throws SQLException{
+//        int result = commentDao.delete((long) 4);
+//    }
+
+
     @Test
-    public void delete() throws SQLException{
-        int result = commentDao.delete((long) 4);
+    public void updatecomment() throws SQLException{
+        int result = commentDao.updatecommnet(67l);
+        System.out.println(result);
     }
 }
