@@ -92,15 +92,6 @@ public interface UserDao {
     int update(User user) throws SQLException;
 
 
-//    /**
-//     *
-//     * @param id
-//     * @return
-//     * @throws SQLException
-//     */
-//    long selectarticle(long id) throws SQLException;
-
-
     /**
      *
      * @param id
@@ -108,4 +99,20 @@ public interface UserDao {
      * @throws SQLException
      */
     int updatearticle(long id) throws SQLException;
+
+    /**
+     * 根据id获取user数据
+     * @param id
+     * @return
+     * @throws SQLException
+     */
+    User getUserr(long id) throws SQLException;
+
+    /**
+     * 更新文章数
+     * @param user
+     * @return
+     * @throws SQLException
+     */
+    int updatee(User user) throws SQLException;
 }

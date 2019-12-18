@@ -82,4 +82,5 @@ public class ArticleDaoTest {
         article.setLikes(article.getLikes()-1);
         articleDao.update(article);
     }
+
 }

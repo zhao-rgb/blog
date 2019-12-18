@@ -106,12 +106,18 @@ public interface ArticleDao {
   Article getArticle(long id)throws SQLException;
 
   /**
-   *
+   *更新喜欢数
    * @param article
    * @return
    * @throws SQLException
    */
   int update(Article article) throws SQLException;
 
+  /**
+   * 更新评论数
+   * @param article
+   * @return
+   * @throws SQLException
+   */
   int updatee(Article article) throws  SQLException;
 }

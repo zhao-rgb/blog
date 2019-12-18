@@ -122,10 +122,13 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Result deleteArticle(long id) {
+    public Result deleteArticle(long id,long userId) {
         int n = 0;
         try {
             n = articleDao.delete(id);
+            User user = userDao.getUserr(userId);
+            user.setArticles((short) (user.getArticles()-1));
+            userDao.updatee(user);
         } catch (SQLException e) {
             logger.error("删除异常");
         }

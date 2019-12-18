@@ -268,7 +268,6 @@ public class ArticleDaoImpl implements ArticleDao {
     @Override
     public Article getArticle(long articleId) throws SQLException {
         Connection connection = DbUtil.getConnection();
-//        String sql = "SELECT * FROM t_article t1  WHERE t1.id=? ";
         String sql = "SELECT * FROM t_article WHERE id= "+articleId;
         PreparedStatement pstmt = connection.prepareStatement(sql);
 //        pstmt.setLong(1,articleId);

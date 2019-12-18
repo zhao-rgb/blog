@@ -132,11 +132,12 @@ public class CommentController extends HttpServlet {
     }
 
     private void deleteComment(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String info = req.getPathInfo().trim();
-        String id = info.substring(info.indexOf("/") + 1);
-//        String id = req.getParameter("id");
-        Result result = commentService.deleteComment(Long.parseLong(id));
         Gson gson = new GsonBuilder().create();
+//        String info = req.getPathInfo().trim();
+//        String id = info.substring(info.indexOf("/") + 1);
+        String id = req.getParameter("id");
+        String articleId = req.getParameter("articleId");
+        Result result = commentService.deleteComment(Long.valueOf(id),Long.valueOf(articleId));
         PrintWriter out = resp.getWriter();
         out.print(gson.toJson(result));
         out.close();

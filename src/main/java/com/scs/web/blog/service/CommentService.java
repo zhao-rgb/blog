@@ -40,5 +40,5 @@ public interface CommentService {
      * @param id
      * @return
      */
-    Result deleteComment(long id);
+    Result deleteComment(long id,long articleId);
 }

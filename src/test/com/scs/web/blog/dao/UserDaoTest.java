@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.sql.SQLException;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,6 +106,13 @@ public class UserDaoTest {
     public void updatearticle() throws SQLException{
         int result = userDao.updatearticle(1l);
         System.out.println(result);
+    }
+
+    @Test
+    public void updatee() throws SQLException{
+        User user = userDao.getUserr(1);
+        user.setArticles((user.getArticles()));
+        userDao.updatee(user);
     }
 }
 

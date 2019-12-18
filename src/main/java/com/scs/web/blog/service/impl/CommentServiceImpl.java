@@ -1,5 +1,6 @@
 package com.scs.web.blog.service.impl;
 
+import com.scs.web.blog.dao.ArticleDao;
 import com.scs.web.blog.dao.CommentDao;
 import com.scs.web.blog.domain.dto.CommentDto;
 import com.scs.web.blog.domain.vo.CommentVo;
@@ -28,6 +29,7 @@ import java.util.Map;
  **/
 public class CommentServiceImpl implements CommentService {
     private CommentDao commentDao = DaoFactory.getCommentDaoInstance();
+    private ArticleDao articleDao = DaoFactory.getArticleDaoInstance();
     private static Logger logger = LoggerFactory.getLogger(CommentServiceImpl.class);
     @Override
     public Map<String, Object> newcomment(CommentDto commentDto) {
@@ -82,10 +84,13 @@ public class CommentServiceImpl implements CommentService {
 
 
     @Override
-    public Result deleteComment(long id) {
+    public Result deleteComment(long id ,long articleId) {
         int n =0;
         try {
             n = commentDao.delete(id);
+            Article article = articleDao.getArticle(articleId);
+            article.setComments(article.getComments()-1);
+            articleDao.updatee(article);
         } catch (SQLException e) {
             logger.error("删除出现异常");
         }

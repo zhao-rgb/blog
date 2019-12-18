@@ -62,5 +62,5 @@ public interface ArticleService {
      * @param id
      * @return
      */
-    Result deleteArticle(long id);
+    Result deleteArticle(long id, long userId);
 }

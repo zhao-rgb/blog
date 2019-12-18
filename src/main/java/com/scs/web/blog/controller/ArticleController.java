@@ -131,10 +131,10 @@ public class ArticleController extends HttpServlet {
             deleteArticle(req, resp);
     }
     private void deleteArticle(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
-        String info = req.getPathInfo().trim();
-        String id = info.substring(info.indexOf("/") + 1);
-        Result result = articleService.deleteArticle(Long.parseLong(id));
         Gson gson = new GsonBuilder().create();
+        String id = req.getParameter("id");
+        String userId = req.getParameter("userId");
+        Result result = articleService.deleteArticle(Long.valueOf(id),Long.valueOf(userId));
         PrintWriter out = resp.getWriter();
         out.print(gson.toJson(result));
         out.close();

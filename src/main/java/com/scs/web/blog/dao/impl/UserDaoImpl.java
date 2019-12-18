@@ -214,19 +214,6 @@ public class UserDaoImpl implements UserDao {
         return i;
     }
 
-//    @Override
-//    public long selectarticle(long id) throws SQLException {
-//        Connection connection = DbUtil.getConnection();
-//        String sql = "SELECT articles FROM t_user WHERE id = ?";
-//        PreparedStatement pst = connection.prepareStatement(sql);
-//        pst.setLong(1,id);
-//        ResultSet rs = pst.executeQuery();
-//        long articles = 0;
-//        while (rs.next()){
-//            articles = rs.getShort("articles");
-//        }
-//        return articles;
-//    }
 
     @Override
     public int updatearticle(long id) throws SQLException {
@@ -239,5 +226,43 @@ public class UserDaoImpl implements UserDao {
         int result = pst.executeUpdate();
         System.out.println(result);
         return  result;
+    }
+
+    @Override
+    public User getUserr(long userId) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql = "SELECT * FROM t_user WHERE id = "+userId;
+        PreparedStatement pst = connection.prepareStatement(sql);
+        ResultSet rs = pst.executeQuery(sql);
+        User user =null;
+        if(rs.next()){
+            user = new User();
+            user.setId(rs.getLong("id"));
+            user.setMobile(rs.getString("mobile"));
+            user.setPassword(rs.getString("password"));
+            user.setNickname(rs.getString("nickname"));
+            user.setAvatar(rs.getString("avatar"));
+            user.setGender(rs.getString("gender"));
+            user.setBirthday(rs.getDate("birthday").toLocalDate());
+            user.setIntroduction(rs.getString("introduction"));
+            user.setAddress(rs.getString("address"));
+            user.setFollows(rs.getShort("follows"));
+            user.setFans(rs.getShort("fans"));
+            user.setArticles(rs.getShort("articles"));
+            user.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
+            user.setStatus(rs.getShort("status"));
+        }
+        return user;
+    }
+
+    @Override
+    public int updatee(User user) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql = "UPDATE  t_user SET articles = ? WHERE id = ? ";
+        PreparedStatement pst = connection.prepareStatement(sql);
+        pst.setLong(1,user.getArticles());
+        pst.setLong(2,user.getId());
+        int i = pst.executeUpdate();
+        return i;
     }
 }
