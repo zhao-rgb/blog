@@ -83,8 +83,7 @@ public class UserServiceImpl implements UserService {
         try {
             userList = userDao.selectHotUsers();
         } catch (SQLException e) {
-//            logger.error("获取热门用户出现异常");
-            e.printStackTrace();
+            logger.error("获取热门用户出现异常");
         }
         if (userList != null) {
             //成功并返回数据

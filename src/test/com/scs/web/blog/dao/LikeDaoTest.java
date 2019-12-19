@@ -1,5 +1,6 @@
 package com.scs.web.blog.dao;
 
+import com.scs.web.blog.entity.Like;
 import com.scs.web.blog.factory.DaoFactory;
 import org.junit.Test;
 
@@ -30,5 +31,11 @@ public class LikeDaoTest {
 
     @Test
     public void cancelLike() {
+    }
+
+    @Test
+    public void selectByUserId() throws SQLException{
+        Like like =likeDao.selectByUserId(1l);
+        System.out.println(like);
     }
 }

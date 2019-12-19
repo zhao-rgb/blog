@@ -18,6 +18,33 @@ import java.sql.SQLException;
  * @Version 1.0
  **/
 public class LikeDaoImpl implements LikeDao {
+    @Override
+    public Like selectByUserId(long userId) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql = "SELECT * FROM t_like WHERE user_id = ?";
+        PreparedStatement pst = connection.prepareStatement(sql);
+        pst.setLong(1,userId);
+        ResultSet rs = pst.executeQuery();
+        Like like =getLike(userId);
+        return like;
+    }
+
+    @Override
+    public Like getLike(long userId) throws SQLException {
+        Connection connection = DbUtil.getConnection();
+        String sql = "SELECT * FROM t_like WHERE user_id = ?";
+        PreparedStatement pst = connection.prepareStatement(sql);
+        pst.setLong(1,userId);
+        ResultSet rs = pst.executeQuery();
+        Like like = null;
+        while(rs.next()){
+            like = new Like();
+            like.setId(rs.getLong("id"));
+            like.setUserId(rs.getLong("user_id"));
+            like.setArticleId(rs.getLong("article_id"));
+        }
+        return like;
+    }
 
     @Override
     public boolean insertLike(long useId, long articleId) throws SQLException {
@@ -38,10 +65,10 @@ public class LikeDaoImpl implements LikeDao {
     public boolean deleteLike(long useId, long articleId) throws SQLException {
         Connection connection = DbUtil.getConnection();
         String sql = "DELETE FROM t_like WHERE user_id=? AND article_id=?";
-        PreparedStatement pstmt = connection.prepareStatement(sql);
-        pstmt.setLong(1, useId);
-        pstmt.setLong(2, articleId);
-        int result = pstmt.executeUpdate();
+        PreparedStatement pst = connection.prepareStatement(sql);
+        pst.setLong(1, useId);
+        pst.setLong(2, articleId);
+        int result = pst.executeUpdate();
         if (result > 0) {
             return true;
         } else {

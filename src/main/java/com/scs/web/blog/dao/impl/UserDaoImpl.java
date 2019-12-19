@@ -7,10 +7,7 @@ import com.scs.web.blog.domain.vo.UserVo;
 import com.scs.web.blog.entity.Article;
 import com.scs.web.blog.entity.User;
 import com.scs.web.blog.factory.DaoFactory;
-import com.scs.web.blog.util.BeanHandler;
-import com.scs.web.blog.util.DbUtil;
-import com.scs.web.blog.util.ResponseObject;
-import com.scs.web.blog.util.Result;
+import com.scs.web.blog.util.*;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,13 +61,14 @@ public class UserDaoImpl implements UserDao {
     @Override
     public int insert(UserDto userDto) throws SQLException {
         Connection connection = DbUtil.getConnection();
-        String sql = "INSERT INTO t_user(mobile, password, nickname, create_time) VALUES(?, ?, ?, ?) ";
-        PreparedStatement pstmt = connection.prepareStatement(sql);
-        pstmt.setString(1, userDto.getMobile());
-        pstmt.setString(2, DigestUtils.md5Hex(userDto.getPassword()));
-        pstmt.setString(3, userDto.getNickname());
-        pstmt.setObject(4, Timestamp.valueOf(LocalDateTime.now()));
-        int i = pstmt.executeUpdate();
+        String sql = "INSERT INTO t_user(mobile, password, nickname, create_time,birthday) VALUES(?, ?, ?, ?,?) ";
+        PreparedStatement pst = connection.prepareStatement(sql);
+        pst.setString(1, userDto.getMobile());
+        pst.setString(2, DigestUtils.md5Hex(userDto.getPassword()));
+        pst.setString(3, userDto.getNickname());
+        pst.setObject(4, Timestamp.valueOf(LocalDateTime.now()));
+        pst.setObject(5, DataUtil.getBirthday());
+        int i = pst.executeUpdate();
         System.out.println("执行为插入方法后受影响的行数为：" + i);
         return i;
     }

@@ -12,6 +12,22 @@ import java.sql.SQLException;
  * @Version 1.0
  **/
 public interface LikeDao {
+
+    /**
+     *
+     * @param userId
+     * @return
+     * @throws SQLException
+     */
+    Like selectByUserId(long userId) throws SQLException;
+
+    /**
+     *
+     * @param userId
+     * @return
+     * @throws SQLException
+     */
+    Like getLike(long userId) throws SQLException;
     /**
      * 写入一条喜欢
      * @param useId

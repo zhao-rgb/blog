@@ -28,18 +28,18 @@ public class LikeServiceImpl implements LikeService {
     public Result addLike(long userId, long articleId) {
         boolean flag;
         try {
-            flag = likeDao.insertLike(userId, articleId);
-            if(flag){
-                Article article = articleDao.getArticle(articleId);
-                if (article != null) {
+            Like like = likeDao.getLike(userId);
+            if(like.getUserId()==userId&&like.getArticleId()==articleId){
+                return Result.failure(ResultCode.LIKES_NOT_FOUND);
+            }else {
+                flag = likeDao.insertLike(userId, articleId);
+                if(flag){
+                    Article article = articleDao.getArticle(articleId);
                     article.setLikes(article.getLikes()+1);
                     articleDao.update(article);
                 }
-            } else {
-                return Result.failure(ResultCode.LIKES_NOT_FOUND);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
             return Result.failure(ResultCode.DATABASE_ERROR);
         }
         return Result.success();
@@ -60,7 +60,6 @@ public class LikeServiceImpl implements LikeService {
                 return Result.failure(ResultCode.LIKES_NOT_FOUND);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
             return Result.failure(ResultCode.DATABASE_ERROR);
         }
         return Result.success();
