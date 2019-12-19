@@ -115,4 +115,11 @@ public interface UserDao {
      * @throws SQLException
      */
     int updatee(User user) throws SQLException;
+
+    /**
+     *
+     * @param user
+     * @throws SQLException
+     */
+    void updateavatar(User user) throws SQLException;
 }

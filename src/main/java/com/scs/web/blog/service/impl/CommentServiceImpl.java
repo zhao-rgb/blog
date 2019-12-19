@@ -66,6 +66,10 @@ public class CommentServiceImpl implements CommentService {
         return comments;
     }
 
+
+
+
+
     @Override
     public Result getComment(long articleId) {
         List<CommentVo> commentVoList = new ArrayList<>();
@@ -81,6 +85,26 @@ public class CommentServiceImpl implements CommentService {
         }
 
     }
+
+//    @Override
+//    public Result selectByPage(int currentPage, int count) {
+//        List<Comment> commentList = null;
+//        try {
+//            commentList = CommentDao.selectByPage(currentPage, count);
+//        } catch (SQLException e) {
+//            logger.error("分页查询专题出现异常");
+//        }
+//        if (commentList != null) {
+//            return Result.success(commentList);
+//        } else {
+//            return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
+//        }
+//    }
+//
+//    @Override
+//    public Result getPageComment(int currentPage, int pageCount) {
+//        return null;
+//    }
 
 
     @Override

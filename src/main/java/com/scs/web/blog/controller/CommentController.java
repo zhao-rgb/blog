@@ -130,7 +130,13 @@ public class CommentController extends HttpServlet {
         if(uri.contains("/api/comments/delete"))
             deleteComment(req, resp);
     }
-
+//    private void getCommentByPage(HttpServletResponse resp, int page, int count) throws ServletException, IOException {
+//        Gson gson = new GsonBuilder().create();
+//        Result result = CommentService.selectByPage(page, count);
+//        PrintWriter out = resp.getWriter();
+//        out.print(gson.toJson(result));
+//        out.close();
+//    }
     private void deleteComment(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Gson gson = new GsonBuilder().create();
 //        String info = req.getPathInfo().trim();

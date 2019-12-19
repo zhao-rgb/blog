@@ -54,4 +54,15 @@ public class UserServiceTest {
         user.setId(84L);
         userService.updateUser(user);
     }
+
+
+    @Test
+    public void update(){
+        User user = new User();
+        user.setMobile("18851856258");
+        user.setAvatar("232.jpg");
+        Result result = userService.update(user);
+        System.out.println(result);
+    }
+
 }

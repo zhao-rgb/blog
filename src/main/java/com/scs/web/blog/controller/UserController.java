@@ -11,6 +11,7 @@ import com.scs.web.blog.entity.User;
 import com.scs.web.blog.factory.ServiceFactory;
 import com.scs.web.blog.listener.MySessionContext;
 import com.scs.web.blog.service.UserService;
+import com.scs.web.blog.util.HttpUtil;
 import com.scs.web.blog.util.Message;
 import com.scs.web.blog.util.ResponseObject;
 import com.scs.web.blog.util.Result;
@@ -39,7 +40,7 @@ import java.util.Map;
  * @Date 2019/11/9
  * @Version 1.0
  **/
-@WebServlet(urlPatterns = {"/api/sign-in", "/api/register", "/api/detail/*", "/api/user", "/api/user/*", "/api/user/update/*"})
+@WebServlet(urlPatterns = {"/api/sign-in", "/api/register", "/api/detail/*", "/api/user", "/api/user/*", "/api/user/update/*","/api/updateA"})
 public class UserController extends HttpServlet {
     private static Logger logger = LoggerFactory.getLogger(UserController.class);
     private UserService userService = ServiceFactory.getUserServiceInstance();
@@ -93,17 +94,6 @@ public class UserController extends HttpServlet {
     }
 
     private void getUser(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-//        ResponseObject ro = null;
-//        List<Object> list = null;
-//        String requestPath = req.getRequestURI().trim();
-//        //取得路径参数
-//        String id = requestPath.substring(requestPath.lastIndexOf("/") + 1);
-//        Gson gson = new GsonBuilder().create();
-//        list = (List<Object>) userService.getUser(Long.valueOf(id));
-//        ro = ResponseObject.success(resp.getStatus(), resp.getStatus() == 200 ? "成功" : "失败", list);
-//        PrintWriter out = resp.getWriter();
-//        out.print(gson.toJson(ro));
-//        out.close();
         String info = req.getPathInfo().trim();
         //取得路径参数
         String id = info.substring(info.indexOf("/") + 1);
@@ -175,8 +165,12 @@ public class UserController extends HttpServlet {
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String uri = req.getRequestURI().trim();
         System.out.println(uri);
-        if (uri.contains("/api/user/update"))
+        if (uri.contains("/api/user/update")){
             update(req, resp);
+        }else if(uri.contains("/api/updateA")) {
+            updateAvatar(req,resp);
+        }
+
     }
 
     private void update(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -202,6 +196,22 @@ public class UserController extends HttpServlet {
         out.print(JSONObject.parseObject(JSON.toJSONString(user)));
         out.close();
     }
+    private void updateAvatar(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+//        Gson gson = new GsonBuilder().create();
+        String mobile = req.getParameter("mobile");
+        String avatar = req.getParameter("avatar");
+        User user = new User();
+        user.setMobile(mobile);
+        user.setAvatar(avatar);
+        Result result = userService.update(user);
+        System.out.println(result);
+//        PrintWriter out = resp.getWriter();
+//        out.print(gson.toJson(result));
+//        out.close();
+        HttpUtil.getResponseBody(resp,result);
+    }
+
 
 
     @Override

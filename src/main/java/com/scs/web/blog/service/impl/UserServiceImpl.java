@@ -158,4 +158,26 @@ public class UserServiceImpl implements UserService {
         }
         return Result.success(i);
     }
+
+    @Override
+    public Result update(User user) {
+        User user1;
+        try {
+            user1 = userDao.findUserByMobile(user.getMobile());
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
+        }
+        if (user.getAvatar() != null) {
+            user1.setAvatar(user.getAvatar());
+        }
+        try {
+            userDao.updateavatar(user1);
+        } catch (SQLException e) {
+            logger.error(e.getMessage());
+            return Result.failure(ResultCode.DATABASE_ERROR);
+        }
+        return Result.success();
+    }
+
 }

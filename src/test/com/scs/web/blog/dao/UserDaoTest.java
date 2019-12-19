@@ -70,7 +70,7 @@ public class UserDaoTest {
 
     @Test
     public void findUserByMobile() throws SQLException {
-        User user = userDao.findUserByMobile("13902112146");
+        User user = userDao.findUserByMobile("18851865555");
         System.out.println(user);
     }
 
@@ -113,6 +113,13 @@ public class UserDaoTest {
         User user = userDao.getUserr(1);
         user.setArticles((user.getArticles()));
         userDao.updatee(user);
+    }
+
+    @Test
+    public void update()throws SQLException {
+        User user = userDao.findUserByMobile("18851865555");
+        user.setAvatar("111");
+        userDao.updateavatar(user);
     }
 }
 
