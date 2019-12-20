@@ -31,10 +31,12 @@ public class UploadController extends HttpServlet {
         String name = part.getSubmittedFileName();
         System.out.println("name");
         String path = req.getSession().getServletContext().getRealPath("");
+        System.out.println(path);
         part.write(path + name);
         System.out.println(path + name);
         File file = new File(path + name);
         String url = AliOssUtil.upload(file);
+        System.out.println(url);
         HttpUtil.getResponseBody(resp, Result.success(url));
     }
 }
