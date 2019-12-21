@@ -66,15 +66,11 @@ public class CommentServiceImpl implements CommentService {
         return comments;
     }
 
-
-
-
-
     @Override
-    public Result getComment(long articleId) {
+    public Result getComment(long articleId,int currentPage,int count) {
         List<CommentVo> commentVoList = new ArrayList<>();
         try {
-            commentVoList = commentDao.getComment(articleId);
+            commentVoList = commentDao.getComment(articleId,currentPage,count);
         } catch (SQLException e) {
             logger.error("异常");
         }
@@ -85,27 +81,6 @@ public class CommentServiceImpl implements CommentService {
         }
 
     }
-
-//    @Override
-//    public Result selectByPage(int currentPage, int count) {
-//        List<Comment> commentList = null;
-//        try {
-//            commentList = CommentDao.selectByPage(currentPage, count);
-//        } catch (SQLException e) {
-//            logger.error("分页查询专题出现异常");
-//        }
-//        if (commentList != null) {
-//            return Result.success(commentList);
-//        } else {
-//            return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
-//        }
-//    }
-//
-//    @Override
-//    public Result getPageComment(int currentPage, int pageCount) {
-//        return null;
-//    }
-
 
     @Override
     public Result deleteComment(long id ,long articleId) {

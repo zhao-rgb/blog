@@ -197,20 +197,13 @@ public class UserController extends HttpServlet {
         out.close();
     }
     private void updateAvatar(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-
-//        Gson gson = new GsonBuilder().create();
         String mobile = req.getParameter("mobile");
         String avatar = req.getParameter("avatar");
-        System.out.println(mobile);
-        System.out.println(avatar);
         User user = new User();
         user.setMobile(mobile);
         user.setAvatar(avatar);
         Result result = userService.update(user);
         System.out.println(result);
-//        PrintWriter out = resp.getWriter();
-//        out.print(gson.toJson(result));
-//        out.close();
         HttpUtil.getResponseBody(resp,result);
     }
 

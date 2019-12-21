@@ -33,21 +33,8 @@ public interface CommentService {
      * @param articleId
      * @return
      */
-    Result getComment(long articleId);
-//    /**
-//     * 分页查询评论信息
-//     * @param currentPage
-//     * @param count
-//     * @return
-//     */
-//    Result selectByPage(int currentPage,int count);
-//    /**
-//     * 分页查询评论
-//     * @param currentPage
-//     * @param pageCount
-//     * @return
-//     */
-//    Result getPageComment(int currentPage,int pageCount);
+    Result getComment(long articleId ,int currentPage,int count);
+
     /**
      *
      * @param id

@@ -31,19 +31,13 @@ public interface CommentDao {
     List<Comment> selectAll() throws SQLException;
 
     /**
-     *得到评论的东西
+     *得到每篇文章的评论
      * @param articleId
      * @return
      * @throws SQLException
      */
-    List<CommentVo> getComment(long articleId) throws SQLException;
-//    /**
-//     * 分页显示评论信息
-//     * @param currentPage
-//     * @return
-//     * @throws SQLException
-//     */
-//     List<Comment> selectByPage(int currentPage, int count)throws SQLException;
+    List<CommentVo> getComment(long articleId,int currentPage, int count) throws SQLException;
+
     /**
      *删除评论
      * @param id

@@ -33,7 +33,7 @@ import java.util.Map;
  * @Date 2019/12/9
  * @Version 1.0
  **/
-@WebServlet(urlPatterns = {"/api/comment","/api/comment/*","/api/comments","/api/comments/delete/*"})
+@WebServlet(urlPatterns = {"/api/comment","/api/comment/*","/api/comments","/api/comments/delete/*","/api/com"})
 public class CommentController extends HttpServlet {
     private static Logger logger = LoggerFactory.getLogger(CommentController.class);
     private CommentDao commentDao = DaoFactory.getCommentDaoInstance();
@@ -41,40 +41,35 @@ public class CommentController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         String uri = req.getRequestURI().trim();
         System.out.println(uri);
+        String id = req.getParameter("id");
+        String page = req.getParameter("page");
+        String count = req.getParameter("count");
         if(uri.contains("/api/comments")){
             listComment(req, resp);
         }else if(uri.contains("/api/comment")){
-            getComment(req, resp);
+            getComment(resp,Long.parseLong(id),Integer.parseInt(page),Integer.parseInt(count));
         }
-
     }
-
-
 
     private void listComment(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Comment> comments = commentService.listComment();
         Gson gson = new Gson();
-        resp.setContentType("application/json;charset=UTF-8");
-        resp.setCharacterEncoding("UTF-8");
         PrintWriter out = resp.getWriter();
         ResponseObject ro = null;
         ro = ResponseObject.success(resp.getStatus(), resp.getStatus() == 200 ? "成功" : "失败", comments);
         out.print(gson.toJson(ro));
         out.close();
     }
-    private void getComment(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String info = req.getPathInfo().trim();
-        String id = info.substring(info.indexOf("/") + 1);
-        Result result = commentService.getComment(Long.parseLong(id));
+
+    private void getComment(HttpServletResponse resp,long id,int page, int count) throws ServletException, IOException {
         Gson gson = new GsonBuilder().create();
+        Result result = commentService.getComment(id,page,count);
         PrintWriter out = resp.getWriter();
         out.print(gson.toJson(result));
         out.close();
     }
-
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -111,13 +106,7 @@ public class CommentController extends HttpServlet {
 
             case Message.REGISTER_SUCCESS:
                 ro = ResponseObject.success(200, msg, map.get("data"));
-//            default:
-//                ro = ResponseObject.success(200, msg);
         }
-
-
-        //补全user的id字段信息
-        //通过response对象返回Json信息
         PrintWriter out = resp.getWriter();
         out.print(gson.toJson(ro));
         out.close();
@@ -130,13 +119,7 @@ public class CommentController extends HttpServlet {
         if(uri.contains("/api/comments/delete"))
             deleteComment(req, resp);
     }
-//    private void getCommentByPage(HttpServletResponse resp, int page, int count) throws ServletException, IOException {
-//        Gson gson = new GsonBuilder().create();
-//        Result result = CommentService.selectByPage(page, count);
-//        PrintWriter out = resp.getWriter();
-//        out.print(gson.toJson(result));
-//        out.close();
-//    }
+
     private void deleteComment(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Gson gson = new GsonBuilder().create();
 //        String info = req.getPathInfo().trim();

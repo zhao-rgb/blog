@@ -10,9 +10,9 @@ import static org.junit.Assert.*;
 
 public class CommentServiceTest {
    private CommentService commentService = ServiceFactory.getCommentServiceInstance();
-    @Test
-    public void getComment() throws SQLException {
-        Result rs = commentService.getComment(1);
-        System.out.println(rs.getData());
-    }
+//    @Test
+//    public void getComment() throws SQLException {
+//        Result rs = commentService.getComment(1);
+//        System.out.println(rs.getData());
+//    }
 }

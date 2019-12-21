@@ -23,7 +23,7 @@ public class DaoFactory {
     public static CommentDao getCommentDaoInstance(){
         return new CommentDaoImpl();
     }
-    public  static LikeDao getLikeDaoInstance(){
+    public static LikeDao getLikeDaoInstance(){
         return new LikeDaoImpl();
     }
 }

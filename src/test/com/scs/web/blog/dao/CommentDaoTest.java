@@ -31,11 +31,11 @@ public class CommentDaoTest {
     }
 
 
-    @Test
-    public void getComment() throws  SQLException{
-        List<CommentVo> commentVoList = commentDao.getComment((long) 19);
-        System.out.println(commentVoList);
-    }
+//    @Test
+//    public void getComment() throws  SQLException{
+//        List<CommentVo> commentVoList = commentDao.getComment((long) 19);
+//        System.out.println(commentVoList);
+//    }
 
 //    @Test
 //    public void delete() throws SQLException{

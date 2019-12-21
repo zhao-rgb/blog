@@ -58,24 +58,15 @@ public class CommentDaoImpl implements CommentDao {
         }
         return commentList;
     }
-//    @Override
-//    public List<Comment> selectByPage(int currentPage, int count) throws SQLException {
-//        Connection connection = DbUtil.getConnection();
-//        String sql = "SELECT * FROM t_comment " +
-//                "ORDER BY id  LIMIT ?,? ";
-//        PreparedStatement pstmt = connection.prepareStatement(sql);
-//        pstmt.setInt(1, (currentPage - 1) * count);
-//        pstmt.setInt(2, count);
-//        ResultSet rs = pstmt.executeQuery();
-//        List<Comment> commentList = convertComment(rs);
-//        return commentList;
-//    }
+
     @Override
-    public List<CommentVo> getComment(long articleId) throws SQLException {
+    public List<CommentVo> getComment(long articleId,int currentPage, int count) throws SQLException {
         Connection connection = DbUtil.getConnection();
-        String sql = "SELECT a.*,b.avatar,b.nickname FROM t_comment a LEFT JOIN t_user b ON a.user_id = b.id WHERE a.article_id = ?";
+        String sql = "SELECT a.*,b.avatar,b.nickname FROM t_comment a LEFT JOIN t_user b ON a.user_id = b.id WHERE a.article_id = ? LIMIT ?,?";
         PreparedStatement pst= connection.prepareStatement(sql);
         pst.setLong(1,articleId);
+        pst.setInt(2, (currentPage - 1) * count);
+        pst.setInt(3, count);
         ResultSet rs = pst.executeQuery();
         CommentVo commentVo = null;
         List<CommentVo> commentVoList = new ArrayList<>();
@@ -123,21 +114,7 @@ public class CommentDaoImpl implements CommentDao {
         System.out.println(result);
         return result;
     }
-//    public static List<Comment> convertComment(ResultSet rs) {
-//        List<Comment> commentList = new ArrayList<>(50);
-//        try {
-//            while (rs.next()) {
-//                Comment comment = new Comment();
-//                comment.setId(rs.getLong("id"));
-//                comment.setUserId(rs.getLong("user_id"));
-//                comment.setArticleId(rs.getLong("article_id"));
-//                comment.setContent(rs.getString("connent"));
-//                comment.setCreateTime(rs.getTimestamp("create_time").toLocalDateTime());
-//                commentList.add(comment);
-//            }
-//        } catch (SQLException e) {
-//            logger.error("查询专题数据产生异常");
-//        }
-//        return commentList;
-//    }
+
+
+
 }
