@@ -26,4 +26,11 @@ public interface LikeService {
      * @return
      */
     Result lessenLike(long userId, long articleId);
+
+    /**
+     *
+     * @param userId
+     * @return
+     */
+    Result getLikes(long userId);
 }

@@ -1,8 +1,10 @@
 package com.scs.web.blog.dao;
 
+import com.scs.web.blog.domain.vo.LikeVo;
 import com.scs.web.blog.entity.Like;
 
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * @author zhao
@@ -46,4 +48,11 @@ public interface LikeDao {
      */
     boolean deleteLike(long useId, long articleId) throws  SQLException;
 
+    /**
+     *
+     * @param userId
+     * @return
+     * @throws SQLException
+     */
+    List<LikeVo> getLikes(long userId) throws SQLException;
 }

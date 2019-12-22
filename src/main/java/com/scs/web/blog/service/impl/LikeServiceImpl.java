@@ -3,14 +3,19 @@ package com.scs.web.blog.service.impl;
 import com.scs.web.blog.dao.ArticleDao;
 import com.scs.web.blog.dao.LikeDao;
 import com.scs.web.blog.domain.vo.ArticleVo;
+import com.scs.web.blog.domain.vo.LikeVo;
 import com.scs.web.blog.entity.Article;
 import com.scs.web.blog.entity.Like;
 import com.scs.web.blog.factory.DaoFactory;
 import com.scs.web.blog.service.LikeService;
 import com.scs.web.blog.util.Result;
 import com.scs.web.blog.util.ResultCode;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,9 +25,11 @@ import java.util.List;
  * @Date 2019/12/13
  * @Version 1.0
  **/
+@Slf4j
 public class LikeServiceImpl implements LikeService {
     private LikeDao likeDao = DaoFactory.getLikeDaoInstance();
     private ArticleDao articleDao = DaoFactory.getArticleDaoInstance();
+    private static Logger logger = LoggerFactory.getLogger(LikeServiceImpl.class);
 
     @Override
     public Result addLike(long userId, long articleId) {
@@ -63,5 +70,20 @@ public class LikeServiceImpl implements LikeService {
             return Result.failure(ResultCode.DATABASE_ERROR);
         }
         return Result.success();
+    }
+
+    @Override
+    public Result getLikes(long userId) {
+        List<LikeVo> likeVoList = new ArrayList<>();
+        try {
+            likeVoList = likeDao.getLikes(userId);
+        }catch (SQLException e){
+            logger.error("异常");
+        }
+        if(likeVoList != null){
+            return Result.success(likeVoList);
+        }else {
+            return Result.failure(ResultCode.RESULT_CODE_DATA_NONE);
+        }
     }
 }

@@ -24,10 +24,21 @@ import java.io.PrintWriter;
  * @Date 2019/12/14
  * @Version 1.0
  **/
-@WebServlet(urlPatterns = {"/api/like","/api/like/delete"})
+@WebServlet(urlPatterns = {"/api/like","/api/like/delete","/api/like/*"})
 @Slf4j
 public class LikeController extends HttpServlet {
     private LikeService  likeService = ServiceFactory.getLikeServiceInstance();
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Gson gson = new GsonBuilder().create();
+        String userId = req.getParameter("userId");
+        System.out.println(userId);
+        Result result = likeService.getLikes(Long.valueOf(userId));
+        PrintWriter out = resp.getWriter();
+        out.print(gson.toJson(result));
+        out.close();
+    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

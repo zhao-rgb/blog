@@ -29,14 +29,14 @@ public interface CommentService {
     List<Comment> listComment();
 
     /**
-     *
+     *分页展示评论
      * @param articleId
      * @return
      */
     Result getComment(long articleId ,int currentPage,int count);
 
     /**
-     *
+     *删除评论
      * @param id
      * @return
      */
