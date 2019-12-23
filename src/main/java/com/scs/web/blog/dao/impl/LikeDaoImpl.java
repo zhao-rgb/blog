@@ -82,7 +82,7 @@ public class LikeDaoImpl implements LikeDao {
     @Override
     public List<LikeVo> getLikes(long userId) throws SQLException {
         Connection connection = DbUtil.getConnection();
-        String sql = "SELECT a.*,b.title,b.cover FROM t_like a LEFT JOIN t_article b ON a.article_id = b.id WHERE a.user_id = ?";
+        String sql = "SELECT  a.*,b.title,b.cover FROM t_like a LEFT JOIN t_article b ON a.article_id = b.id WHERE a.user_id = ?";
         PreparedStatement pst = connection.prepareStatement(sql);
         pst.setLong(1,userId);
         ResultSet rs = pst.executeQuery();
